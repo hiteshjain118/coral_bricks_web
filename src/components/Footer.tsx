@@ -15,7 +15,8 @@ const Footer: React.FC = () => {
               <span className="text-lg font-bold">Coral Bricks AI</span>
             </div>
             <p className="text-gray-300 mb-4 max-w-md">
-              Empowering businesses with cutting-edge AI solutions. We transform ideas into intelligent, scalable applications that drive growth and innovation.
+              Easily build and deploy reliable AI agents and web apps for your business on scalable, 
+              secure and compliant infrastructure—right from your chat interface.
             </p>
                           <div className="flex space-x-4">
                 <a href="https://calendly.com/hiteshjain118/20-minutes-with-hitesh?back=1" className="text-gray-400 hover:text-coral-400 transition-colors flex items-center space-x-2" target="_blank" rel="noopener noreferrer">
@@ -34,11 +35,6 @@ const Footer: React.FC = () => {
               <li>
                 <Link to="/about" className="text-gray-300 hover:text-coral-400 transition-colors">
                   About Us
-                </Link>
-              </li>
-              <li>
-                <Link to="/services" className="text-gray-300 hover:text-coral-400 transition-colors">
-                  Services
                 </Link>
               </li>
               <li>

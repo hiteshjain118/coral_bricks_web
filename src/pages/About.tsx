@@ -11,31 +11,31 @@ const About: React.FC = () => {
   const values = [
     {
       icon: HeartIcon,
-      title: 'Passion for Innovation',
-      description: 'We are driven by a deep passion for creating innovative AI solutions that solve real-world problems.'
+      title: 'AI-First Design',
+      description: 'Every feature is designed with AI agents in mind, from hallucination prevention to conversational development.'
     },
     {
       icon: UsersIcon,
-      title: 'Client-Centric Approach',
-      description: 'Your success is our success. We work closely with you to understand your unique challenges and goals.'
+      title: 'Modern Maker Focus',
+      description: 'Built specifically for developers and creators who want to deploy AI agents without infrastructure complexity.'
     },
     {
       icon: GlobeAltIcon,
-      title: 'Global Perspective',
-      description: 'We bring together diverse perspectives and global best practices to deliver exceptional results.'
+      title: 'Enterprise Security',
+      description: 'Bank-grade security and compliance built into every layer, ensuring your AI agents are safe and compliant.'
     },
     {
       icon: TrophyIcon,
-      title: 'Excellence in Execution',
-      description: 'We maintain the highest standards of quality and excellence in every project we undertake.'
+      title: 'Revolutionary Simplicity',
+      description: 'Deploy AI agents through conversation, not complex configurations. Simple, powerful, and reliable.'
     }
   ];
 
   const stats = [
-    { number: '50+', label: 'Projects Completed' },
-    { number: '25+', label: 'Happy Clients' },
-    { number: '99%', label: 'Client Satisfaction' },
-    { number: '24/7', label: 'Support Available' }
+    { number: '10+', label: 'Years Experience' },
+    { number: '100%', label: 'AI Guardrails' },
+    { number: '1-Click', label: 'Deployment' },
+    { number: 'Coming', label: 'Soon' }
   ];
 
   return (
@@ -52,12 +52,12 @@ const About: React.FC = () => {
             <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
               About{' '}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-coral-600 to-brick-600">
-                Coral Bricks AI
+                Our Infrastructure
               </span>
             </h1>
             <p className="text-xl text-gray-600 leading-relaxed">
-              We are a forward-thinking AI company dedicated to transforming businesses 
-              through intelligent automation and cutting-edge artificial intelligence solutions.
+              Easily build and deploy reliable AI agents and web apps for your business on scalable, 
+              secure and compliant infrastructure—right from your chat interface.
             </p>
           </motion.div>
         </div>
@@ -69,45 +69,41 @@ const About: React.FC = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <motion.div
               initial={{ opacity: 0, x: -50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }}
-              viewport={{ once: true }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
             >
               <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
                 Our Story
               </h2>
               <div className="space-y-4 text-gray-600 leading-relaxed">
                 <p>
-                  Founded with a vision to democratize AI technology, Coral Bricks AI emerged 
-                  from the recognition that businesses of all sizes need access to powerful, 
-                  intelligent solutions to stay competitive in today's rapidly evolving digital landscape.
+                  Founded with a vision to revolutionize how modern makers deploy AI, we recognized that developers 
+                  and creators need infrastructure that eliminates hallucinations, provides built-in protections, 
+                  and scales seamlessly—all accessible through a simple chat interface.
                 </p>
                 <p>
-                  Our team of AI experts, data scientists, and business strategists work together 
-                  to create custom solutions that not only solve immediate challenges but also 
-                  position our clients for long-term success in an AI-driven future.
+                  Our team of infrastructure engineers, AI specialists, and compliance experts work together 
+                  to create a platform that lets you focus on building amazing AI agents while we handle 
+                  the complexity of security, compliance, and deployment.
                 </p>
                 <p>
-                  We believe that artificial intelligence should be accessible, understandable, 
-                  and beneficial to everyone. That's why we focus on creating AI solutions that 
-                  are not only powerful but also transparent, ethical, and aligned with your 
-                  business objectives.
+                  We believe that deploying AI agents should be as simple as having a conversation. 
+                  That's why we've built infrastructure with AI guardrails, one-click deployment, 
+                  and conversational development—all designed for the modern maker.
                 </p>
               </div>
             </motion.div>
             <motion.div
               initial={{ opacity: 0, x: 50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              viewport={{ once: true }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
               className="relative"
             >
               <div className="bg-gradient-to-br from-coral-500 to-brick-600 rounded-2xl p-8 text-white">
                 <h3 className="text-2xl font-bold mb-4">Our Mission</h3>
                 <p className="text-lg leading-relaxed opacity-90">
-                  To empower businesses with intelligent AI solutions that drive innovation, 
-                  efficiency, and growth while maintaining the highest standards of ethics 
-                  and transparency.
+                  To enable modern makers to easily build and deploy reliable AI agents and web apps on scalable, 
+                  secure and compliant infrastructure—right from their chat interface.
                 </p>
               </div>
             </motion.div>
@@ -120,16 +116,15 @@ const About: React.FC = () => {
         <div className="container-max">
           <motion.div
             initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
             className="text-center mb-12"
           >
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Our Impact in Numbers
+              Platform Highlights
             </h2>
             <p className="text-xl text-gray-600">
-              Delivering results that speak for themselves
+              Key features that set our infrastructure apart
             </p>
           </motion.div>
 
@@ -138,9 +133,8 @@ const About: React.FC = () => {
               <motion.div
                 key={stat.label}
                 initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: index * 0.1 }}
-                viewport={{ once: true }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.8 + index * 0.1 }}
                 className="text-center"
               >
                 <div className="text-4xl md:text-5xl font-bold text-coral-600 mb-2">
@@ -160,16 +154,15 @@ const About: React.FC = () => {
         <div className="container-max">
           <motion.div
             initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 1.2 }}
             className="text-center mb-16"
           >
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Our Core Values
+              Platform Principles
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              The principles that guide everything we do and every solution we create.
+              The core principles that drive our revolutionary infrastructure platform.
             </p>
           </motion.div>
 
@@ -178,9 +171,8 @@ const About: React.FC = () => {
               <motion.div
                 key={value.title}
                 initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: index * 0.1 }}
-                viewport={{ once: true }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 1.4 + index * 0.1 }}
                 className="text-center"
               >
                 <div className="bg-coral-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -203,43 +195,41 @@ const About: React.FC = () => {
         <div className="container-max">
           <motion.div
             initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 1.8 }}
             className="text-center mb-16"
           >
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Meet Our Team
+              Founding Team
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              A diverse group of experts passionate about AI innovation and client success.
+              Experts with 10+ years experience in deep infrastructure, AI, and compliance.
             </p>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
               {
-                name: 'Dr. Sarah Chen',
-                role: 'Chief AI Officer',
-                description: 'Leading our AI strategy with 15+ years in machine learning and neural networks.'
+                name: 'Hitesh Jain',
+                role: 'Founder & CEO',
+                description: '13+ years at Meta leading AI personalization, messaging and trust and safety systems.'
               },
               {
-                name: 'Michael Rodriguez',
-                role: 'Head of Engineering',
-                description: 'Expert in scalable AI systems and cloud architecture with a focus on performance.'
+                name: 'AI Infrastructure Team',
+                role: 'Engineering',
+                description: 'Deep expertise in scalable AI systems, security, and compliance architecture.'
               },
               {
-                name: 'Emily Watson',
-                role: 'VP of Client Success',
-                description: 'Ensuring every client achieves their goals through strategic AI implementation.'
+                name: 'Platform Team',
+                role: 'Product & Design',
+                description: 'Focused on creating the most intuitive conversational development experience.'
               }
             ].map((member, index) => (
               <motion.div
                 key={member.name}
                 initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: index * 0.1 }}
-                viewport={{ once: true }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 2.0 + index * 0.1 }}
                 className="bg-white p-8 rounded-xl shadow-lg text-center"
               >
                 <div className="w-24 h-24 bg-gradient-to-br from-coral-500 to-brick-600 rounded-full mx-auto mb-4 flex items-center justify-center">

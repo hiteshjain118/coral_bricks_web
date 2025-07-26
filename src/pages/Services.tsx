@@ -16,44 +16,44 @@ const Services: React.FC = () => {
   const services = [
     {
       icon: CpuChipIcon,
-      title: 'Machine Learning Solutions',
-      description: 'Custom ML models and algorithms tailored to your specific business needs and data requirements.',
-      features: ['Predictive Analytics', 'Pattern Recognition', 'Automated Decision Making', 'Model Training & Optimization'],
+      title: 'AI Agent Infrastructure',
+      description: 'Deploy and manage AI agents with our robust, scalable infrastructure platform.',
+      features: ['One-Click Deployment', 'Auto-Scaling', 'Real-time Monitoring', 'Agent Management'],
       color: 'from-blue-500 to-cyan-500'
     },
     {
       icon: ChatBubbleLeftRightIcon,
-      title: 'Natural Language Processing',
-      description: 'Advanced NLP solutions for text analysis, sentiment analysis, and conversational AI applications.',
-      features: ['Text Classification', 'Sentiment Analysis', 'Chatbot Development', 'Language Translation'],
+      title: 'Web App Hosting',
+      description: 'Deploy your web applications with enterprise-grade security and performance.',
+      features: ['Global CDN', 'SSL Certificates', 'Load Balancing', 'Auto-Deployment'],
       color: 'from-green-500 to-emerald-500'
     },
     {
       icon: EyeIcon,
-      title: 'Computer Vision',
-      description: 'Image and video analysis solutions for automation, quality control, and visual data processing.',
-      features: ['Object Detection', 'Image Classification', 'Facial Recognition', 'Quality Control Systems'],
+      title: 'Chat Interface Development',
+      description: 'Build and deploy everything from your chat interface with our developer-friendly tools.',
+      features: ['Chat Commands', 'Git Integration', 'Local Development', 'Debugging Tools'],
       color: 'from-purple-500 to-pink-500'
     },
     {
       icon: ChartBarIcon,
-      title: 'Data Analytics & BI',
-      description: 'Comprehensive data analysis and business intelligence solutions to drive informed decision-making.',
-      features: ['Data Visualization', 'Real-time Dashboards', 'KPI Tracking', 'Performance Analytics'],
+      title: 'Monitoring & Analytics',
+      description: 'Comprehensive monitoring and analytics to keep your applications running smoothly.',
+      features: ['Real-time Metrics', 'Error Tracking', 'Performance Monitoring', 'Usage Analytics'],
       color: 'from-orange-500 to-red-500'
     },
     {
       icon: CogIcon,
-      title: 'Process Automation',
-      description: 'Intelligent automation solutions to streamline operations and reduce manual workload.',
-      features: ['Workflow Automation', 'Document Processing', 'Email Automation', 'Task Scheduling'],
+      title: 'Security & Compliance',
+      description: 'Enterprise-grade security and compliance built into every layer of our infrastructure.',
+      features: ['SOC 2 Compliance', 'GDPR Ready', 'Data Encryption', 'Access Controls'],
       color: 'from-indigo-500 to-blue-500'
     },
     {
       icon: ShieldCheckIcon,
-      title: 'AI Security & Compliance',
-      description: 'Robust security frameworks and compliance solutions for AI-powered applications.',
-      features: ['Data Protection', 'Privacy Compliance', 'Security Auditing', 'Risk Assessment'],
+      title: 'Developer Experience',
+      description: 'Tools and workflows designed for modern developers and teams.',
+      features: ['Team Collaboration', 'CI/CD Pipelines', 'API Management', 'Documentation'],
       color: 'from-teal-500 to-cyan-500'
     }
   ];
@@ -61,23 +61,23 @@ const Services: React.FC = () => {
   const processSteps = [
     {
       icon: LightBulbIcon,
-      title: 'Discovery & Planning',
-      description: 'We analyze your business needs and create a comprehensive AI strategy.'
+      title: 'Build Your App',
+      description: 'Develop your AI agent or web app using our developer-friendly tools.'
     },
     {
       icon: CogIcon,
-      title: 'Development & Testing',
-      description: 'Our team builds and rigorously tests your custom AI solution.'
+      title: 'Test Locally',
+      description: 'Test your application locally with our CLI tools and debugging features.'
     },
     {
       icon: RocketLaunchIcon,
-      title: 'Deployment & Integration',
-      description: 'Seamless deployment and integration with your existing systems.'
+      title: 'Deploy with One Click',
+      description: 'Deploy to our infrastructure with a single command from your chat interface.'
     },
     {
       icon: ChartBarIcon,
-      title: 'Monitoring & Optimization',
-      description: 'Continuous monitoring and optimization to ensure peak performance.'
+      title: 'Monitor & Scale',
+      description: 'Monitor performance and scale automatically as your app grows.'
     }
   ];
 
@@ -95,12 +95,12 @@ const Services: React.FC = () => {
             <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
               Our{' '}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-coral-600 to-brick-600">
-                AI Services
+                Infrastructure
               </span>
             </h1>
             <p className="text-xl text-gray-600 leading-relaxed">
-              Comprehensive artificial intelligence solutions designed to transform your business 
-              operations and drive sustainable growth through innovation.
+              Reliable infrastructure platform designed to help modern makers deploy AI agents 
+              and web apps with confidence, security, and scalability.
             </p>
           </motion.div>
         </div>
@@ -117,11 +117,11 @@ const Services: React.FC = () => {
             className="text-center mb-16"
           >
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Comprehensive AI Solutions
+              Complete Infrastructure Platform
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              From machine learning to process automation, we offer a full spectrum of AI services 
-              to meet your business needs.
+              From AI agent deployment to web app hosting, we provide everything you need 
+              to build and deploy with confidence.
             </p>
           </motion.div>
 
@@ -171,10 +171,10 @@ const Services: React.FC = () => {
             className="text-center mb-16"
           >
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Our Development Process
+              Simple Deployment Process
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              A proven methodology that ensures successful AI implementation and maximum ROI.
+              From development to production in minutes, not days. Deploy directly from your chat interface.
             </p>
           </motion.div>
 
@@ -217,24 +217,24 @@ const Services: React.FC = () => {
             className="text-center mb-16"
           >
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Industries We Serve
+              Perfect For Modern Makers
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Our AI solutions are tailored for various industries, helping businesses 
-              across sectors achieve digital transformation.
+              Whether you're building AI agents, web apps, or full-stack applications, 
+              our infrastructure scales with your needs.
             </p>
           </motion.div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {[
-              'Healthcare',
-              'Finance',
-              'Retail',
-              'Manufacturing',
-              'Education',
-              'Transportation',
-              'Energy',
-              'Technology'
+              'AI Agents',
+              'Web Apps',
+              'APIs',
+              'Microservices',
+              'Full-Stack Apps',
+              'Mobile Backends',
+              'Data Pipelines',
+              'ML Models'
             ].map((industry, index) => (
               <motion.div
                 key={industry}
@@ -261,17 +261,17 @@ const Services: React.FC = () => {
             viewport={{ once: true }}
           >
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              Ready to Get Started?
+              Ready to Deploy?
             </h2>
             <p className="text-xl mb-8 opacity-90 max-w-2xl mx-auto">
-              Let's discuss how our AI solutions can transform your business and drive 
-              unprecedented growth and efficiency.
+              Start building and deploying your AI agents and web apps on our reliable 
+              infrastructure platform.
             </p>
             <Link
               to="/contact"
               className="bg-white text-coral-600 hover:bg-gray-100 font-semibold py-3 px-8 rounded-lg transition-colors duration-200 inline-block"
             >
-              Schedule a Consultation
+              Start Building
             </Link>
           </motion.div>
         </div>

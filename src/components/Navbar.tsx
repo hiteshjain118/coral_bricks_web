@@ -9,7 +9,6 @@ const Navbar: React.FC = () => {
   const navigation = [
     { name: 'Home', href: '/' },
     { name: 'About', href: '/about' },
-    { name: 'Services', href: '/services' },
     { name: 'Contact', href: '/contact' },
   ];
 
@@ -42,12 +41,6 @@ const Navbar: React.FC = () => {
                 {item.name}
               </Link>
             ))}
-            <Link
-              to="/contact"
-              className="btn-primary"
-            >
-              Get Started
-            </Link>
           </div>
 
           {/* Mobile menu button */}
@@ -83,13 +76,6 @@ const Navbar: React.FC = () => {
                   {item.name}
                 </Link>
               ))}
-              <Link
-                to="/contact"
-                className="block px-3 py-2 text-base font-medium text-coral-600 hover:bg-coral-50"
-                onClick={() => setIsOpen(false)}
-              >
-                Get Started
-              </Link>
             </div>
           </div>
         )}

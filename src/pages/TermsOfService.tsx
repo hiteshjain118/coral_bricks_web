@@ -35,9 +35,8 @@ const TermsOfService: React.FC = () => {
         <div className="container-max max-w-4xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
             className="prose prose-lg max-w-none"
           >
             <div className="space-y-8">
@@ -249,23 +248,12 @@ const TermsOfService: React.FC = () => {
               {/* Contact Information */}
               <section>
                 <h2 className="text-2xl font-bold text-gray-900 mb-4">15. Contact Information</h2>
-                <p className="text-gray-600 leading-relaxed mb-4">
-                  If you have any questions about these Terms of Service, please contact us:
+                <p className="text-gray-600 leading-relaxed">
+                  If you have any questions about these Terms of Service, please email us at{' '}
+                  <a href="mailto:legal@coralbricks.com" className="text-coral-600 hover:text-coral-700 font-medium underline">
+                    legal@coralbricks.com
+                  </a>.
                 </p>
-                <div className="bg-gray-50 p-6 rounded-lg">
-                  <p className="text-gray-600 mb-2">
-                    <strong>Coral Bricks AI</strong>
-                  </p>
-                  <p className="text-gray-600 mb-2">
-                    Email: legal@coralbricks.ai
-                  </p>
-                  <p className="text-gray-600 mb-2">
-                    Phone: +1 (555) 123-4567
-                  </p>
-                  <p className="text-gray-600">
-                    Address: 123 AI Boulevard, Tech City, TC 12345
-                  </p>
-                </div>
               </section>
             </div>
           </motion.div>

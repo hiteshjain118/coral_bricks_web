@@ -2,45 +2,33 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { 
-  CpuChipIcon, 
   RocketLaunchIcon, 
-  ShieldCheckIcon,
-  ChartBarIcon,
-  CogIcon,
-  LightBulbIcon
+  ChatBubbleLeftRightIcon,
+  UserGroupIcon,
+  LockClosedIcon
 } from '@heroicons/react/24/outline';
 
 const Home: React.FC = () => {
   const features = [
     {
-      icon: CpuChipIcon,
-      title: 'Advanced AI Solutions',
-      description: 'Cutting-edge artificial intelligence tailored to your business needs.'
+      icon: UserGroupIcon,
+      title: 'Customized AI Agents',
+      description: 'Create custom AI agents that are specific to your use case and business requirements.'
+    },
+    {
+      icon: ChatBubbleLeftRightIcon,
+      title: 'Conversational Interface',
+      description: 'Create AI agents through your chat window with our intuitive development tools.'
+    },
+    {
+      icon: LockClosedIcon,
+      title: 'AI Guardrails',
+      description: 'Eliminate hallucinations and create secure and compliant agents with built-in protections.'
     },
     {
       icon: RocketLaunchIcon,
-      title: 'Rapid Deployment',
-      description: 'Quick implementation and scaling of AI-powered applications.'
-    },
-    {
-      icon: ShieldCheckIcon,
-      title: 'Enterprise Security',
-      description: 'Bank-grade security protocols to protect your data and systems.'
-    },
-    {
-      icon: ChartBarIcon,
-      title: 'Analytics & Insights',
-      description: 'Comprehensive data analysis and actionable business insights.'
-    },
-    {
-      icon: CogIcon,
-      title: 'Custom Integration',
-      description: 'Seamless integration with your existing systems and workflows.'
-    },
-    {
-      icon: LightBulbIcon,
-      title: 'Innovation Focus',
-      description: 'Staying ahead with the latest AI technologies and methodologies.'
+      title: 'One-Click Deployment',
+      description: 'Easily deploy and scale your AI agents and applications with our streamlined platform.'
     }
   ];
 
@@ -56,22 +44,21 @@ const Home: React.FC = () => {
               transition={{ duration: 0.8 }}
             >
               <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
-                Building the Future with{' '}
+                Reliable Infrastructure for{' '}
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-coral-600 to-brick-600">
-                  AI Innovation
+                  Modern Makers
                 </span>
               </h1>
               <p className="text-xl text-gray-600 mb-8 leading-relaxed">
-                Coral Bricks AI transforms businesses through intelligent automation, 
-                predictive analytics, and cutting-edge artificial intelligence solutions 
-                that drive growth and efficiency.
+                Easily build and deploy reliable AI agents and web apps for your business on scalable, 
+                secure and compliant infrastructure—right from your chat interface.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link to="/contact" className="btn-primary text-center">
-                  Start Your AI Journey
+                  Start Building
                 </Link>
-                <Link to="/services" className="btn-secondary text-center">
-                  Explore Services
+                <Link to="/about" className="btn-secondary text-center">
+                  Learn More
                 </Link>
               </div>
             </motion.div>
@@ -84,20 +71,20 @@ const Home: React.FC = () => {
               <div className="bg-gradient-to-br from-coral-500 to-brick-600 rounded-2xl p-8 shadow-2xl">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="bg-white/20 rounded-lg p-4 backdrop-blur-sm">
-                    <CpuChipIcon className="h-8 w-8 text-white mb-2" />
-                    <h3 className="text-white font-semibold">AI Processing</h3>
+                    <UserGroupIcon className="h-8 w-8 text-white mb-2" />
+                    <h3 className="text-white font-semibold">Custom AI</h3>
                   </div>
                   <div className="bg-white/20 rounded-lg p-4 backdrop-blur-sm">
-                    <ChartBarIcon className="h-8 w-8 text-white mb-2" />
-                    <h3 className="text-white font-semibold">Analytics</h3>
+                    <ChatBubbleLeftRightIcon className="h-8 w-8 text-white mb-2" />
+                    <h3 className="text-white font-semibold">Chat Interface</h3>
                   </div>
                   <div className="bg-white/20 rounded-lg p-4 backdrop-blur-sm">
-                    <ShieldCheckIcon className="h-8 w-8 text-white mb-2" />
-                    <h3 className="text-white font-semibold">Security</h3>
+                    <LockClosedIcon className="h-8 w-8 text-white mb-2" />
+                    <h3 className="text-white font-semibold">Guardrails</h3>
                   </div>
                   <div className="bg-white/20 rounded-lg p-4 backdrop-blur-sm">
                     <RocketLaunchIcon className="h-8 w-8 text-white mb-2" />
-                    <h3 className="text-white font-semibold">Deployment</h3>
+                    <h3 className="text-white font-semibold">Deploy</h3>
                   </div>
                 </div>
               </div>
@@ -117,15 +104,15 @@ const Home: React.FC = () => {
             className="text-center mb-16"
           >
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Why Choose Coral Bricks AI?
+              Why Choose Our Infrastructure?
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              We combine cutting-edge technology with deep industry expertise to deliver 
-              AI solutions that transform your business operations.
+              Build with AI, set guardrails for product logic, security, and compliance. 
+              Deploy with confidence on our scalable platform.
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {features.map((feature, index) => (
               <motion.div
                 key={feature.title}
@@ -158,17 +145,17 @@ const Home: React.FC = () => {
             viewport={{ once: true }}
           >
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              Ready to Transform Your Business?
+              Join the Early Access Waitlist
             </h2>
             <p className="text-xl mb-8 opacity-90 max-w-2xl mx-auto">
-              Join the AI revolution and discover how Coral Bricks AI can help you 
-              achieve unprecedented growth and efficiency.
+              Be among the first to experience our revolutionary infrastructure platform. 
+              Limited spots available for early access.
             </p>
             <Link
               to="/contact"
               className="bg-white text-coral-600 hover:bg-gray-100 font-semibold py-3 px-8 rounded-lg transition-colors duration-200 inline-block"
             >
-              Get Started Today
+              Join Waitlist
             </Link>
           </motion.div>
         </div>

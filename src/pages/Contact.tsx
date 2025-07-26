@@ -1,11 +1,5 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { 
-  EnvelopeIcon, 
-  PhoneIcon, 
-  MapPinIcon,
-  ClockIcon
-} from '@heroicons/react/24/outline';
 
 const Contact: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -13,7 +7,6 @@ const Contact: React.FC = () => {
     email: '',
     company: '',
     phone: '',
-    service: '',
     message: ''
   });
 
@@ -31,62 +24,54 @@ const Contact: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setSubmitStatus('idle');
     
-    // Simulate form submission
-    setTimeout(() => {
+    try {
+      // Create form data for Google Sheets
+      const formDataToSend = new FormData();
+      formDataToSend.append('name', formData.name);
+      formDataToSend.append('email', formData.email);
+      formDataToSend.append('company', formData.company);
+      formDataToSend.append('phone', formData.phone);
+      formDataToSend.append('message', formData.message);
+      
+      // Submit to Google Sheets via Apps Script
+      await fetch('https://script.google.com/macros/s/AKfycbyzJj7F83LR__-dHX2ypVpw96nnUDlip3xcDT1WJMkZImiTOxN6Kd0rZGhm24Uq5I-uZA/exec', {
+        method: 'POST',
+        body: formDataToSend,
+        mode: 'no-cors' // Required for Google Apps Script
+      });
+      
+      // Since we're using no-cors, we can't check the response status
+      // We'll assume success if no error is thrown
       setIsSubmitting(false);
       setSubmitStatus('success');
+      
+      // Reset form
       setFormData({
         name: '',
         email: '',
         company: '',
         phone: '',
-        service: '',
         message: ''
       });
       
       // Reset success message after 5 seconds
       setTimeout(() => setSubmitStatus('idle'), 5000);
-    }, 2000);
+      
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      setIsSubmitting(false);
+      setSubmitStatus('error');
+      
+      // Reset error message after 5 seconds
+      setTimeout(() => setSubmitStatus('idle'), 5000);
+    }
   };
 
-  const contactInfo = [
-    {
-      icon: EnvelopeIcon,
-      title: 'Email',
-      content: 'hello@coralbricks.ai',
-      link: 'mailto:hello@coralbricks.ai'
-    },
-    {
-      icon: PhoneIcon,
-      title: 'Phone',
-      content: '+1 (555) 123-4567',
-      link: 'tel:+15551234567'
-    },
-    {
-      icon: MapPinIcon,
-      title: 'Address',
-      content: '123 AI Boulevard, Tech City, TC 12345',
-      link: '#'
-    },
-    {
-      icon: ClockIcon,
-      title: 'Business Hours',
-      content: 'Mon - Fri: 9:00 AM - 6:00 PM EST',
-      link: '#'
-    }
-  ];
 
-  const services = [
-    'Machine Learning Solutions',
-    'Natural Language Processing',
-    'Computer Vision',
-    'Data Analytics & BI',
-    'Process Automation',
-    'AI Security & Compliance',
-    'Custom AI Development',
-    'AI Consulting'
-  ];
+
+
 
   return (
     <div className="bg-white">
@@ -106,8 +91,8 @@ const Contact: React.FC = () => {
               </span>
             </h1>
             <p className="text-xl text-gray-600 leading-relaxed">
-              Ready to transform your business with AI? Let's discuss how we can help you 
-              achieve your goals and drive innovation.
+              Easily build and deploy reliable AI agents and web apps for your business on scalable, 
+              secure and compliant infrastructure—right from your chat interface.
             </p>
           </motion.div>
         </div>
@@ -120,12 +105,11 @@ const Contact: React.FC = () => {
             {/* Contact Form */}
             <motion.div
               initial={{ opacity: 0, x: -50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }}
-              viewport={{ once: true }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
             >
               <h2 className="text-3xl font-bold text-gray-900 mb-6">
-                Send us a Message
+                Get on our Waitlist
               </h2>
               
               {submitStatus === 'success' && (
@@ -210,26 +194,6 @@ const Contact: React.FC = () => {
                 </div>
 
                 <div>
-                  <label htmlFor="service" className="block text-sm font-medium text-gray-700 mb-2">
-                    Service of Interest
-                  </label>
-                  <select
-                    id="service"
-                    name="service"
-                    value={formData.service}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-coral-500 focus:border-transparent transition-colors"
-                  >
-                    <option value="">Select a service</option>
-                    {services.map((service) => (
-                      <option key={service} value={service}>
-                        {service}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                <div>
                   <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">
                     Message *
                   </label>
@@ -255,46 +219,20 @@ const Contact: React.FC = () => {
               </form>
             </motion.div>
 
-            {/* Contact Information */}
+            {/* Why Choose Us Section */}
             <motion.div
               initial={{ opacity: 0, x: 50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              viewport={{ once: true }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
             >
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">
-                Contact Information
-              </h2>
-              
-              <div className="space-y-6">
-                {contactInfo.map((info) => (
-                  <div key={info.title} className="flex items-start space-x-4">
-                    <div className="bg-coral-100 p-3 rounded-lg">
-                      <info.icon className="h-6 w-6 text-coral-600" />
-                    </div>
-                    <div>
-                      <h3 className="text-lg font-semibold text-gray-900 mb-1">
-                        {info.title}
-                      </h3>
-                      <a
-                        href={info.link}
-                        className="text-gray-600 hover:text-coral-600 transition-colors"
-                      >
-                        {info.content}
-                      </a>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              <div className="mt-8 p-6 bg-gradient-to-br from-coral-500 to-brick-600 rounded-xl text-white">
+              <div className="p-6 bg-gradient-to-br from-coral-500 to-brick-600 rounded-xl text-white">
                 <h3 className="text-xl font-semibold mb-3">
                   Why Choose Coral Bricks AI?
                 </h3>
                 <ul className="space-y-2 text-sm">
                   <li className="flex items-center">
                     <div className="w-2 h-2 bg-white rounded-full mr-3"></div>
-                    Expert AI consultants with 10+ years experience
+                    Experts with 10+ experience in deep infra, AI and compliance
                   </li>
                   <li className="flex items-center">
                     <div className="w-2 h-2 bg-white rounded-full mr-3"></div>
@@ -315,62 +253,6 @@ const Contact: React.FC = () => {
         </div>
       </section>
 
-      {/* FAQ Section */}
-      <section className="bg-gray-50 section-padding">
-        <div className="container-max">
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="text-center mb-12"
-          >
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Frequently Asked Questions
-            </h2>
-            <p className="text-xl text-gray-600">
-              Get answers to common questions about our AI services
-            </p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {[
-              {
-                question: 'How long does it take to implement an AI solution?',
-                answer: 'Implementation timelines vary based on complexity, typically ranging from 4-12 weeks for most projects.'
-              },
-              {
-                question: 'Do you provide ongoing support and maintenance?',
-                answer: 'Yes, we offer comprehensive support packages including monitoring, updates, and optimization.'
-              },
-              {
-                question: 'What industries do you specialize in?',
-                answer: 'We serve multiple industries including healthcare, finance, retail, manufacturing, and technology.'
-              },
-              {
-                question: 'How do you ensure data security and privacy?',
-                answer: 'We implement enterprise-grade security protocols and comply with all major data protection regulations.'
-              }
-            ].map((faq, index) => (
-              <motion.div
-                key={faq.question}
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: index * 0.1 }}
-                viewport={{ once: true }}
-                className="bg-white p-6 rounded-lg shadow-md"
-              >
-                <h3 className="text-lg font-semibold text-gray-900 mb-3">
-                  {faq.question}
-                </h3>
-                <p className="text-gray-600 leading-relaxed">
-                  {faq.answer}
-                </p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
     </div>
   );
 };

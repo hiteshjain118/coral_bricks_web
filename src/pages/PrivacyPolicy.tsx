@@ -35,9 +35,8 @@ const PrivacyPolicy: React.FC = () => {
         <div className="container-max max-w-4xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
             className="prose prose-lg max-w-none"
           >
             <div className="space-y-8">

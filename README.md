@@ -1,6 +1,6 @@
 # Coral Bricks AI - Website
 
-A modern, professional website for Coral Bricks AI, built with React, TypeScript, and Tailwind CSS.
+A modern, professional website for Coral Bricks AI infrastructure platform, built with React, TypeScript, and Tailwind CSS.
 
 ## 🚀 Features
 
@@ -10,7 +10,8 @@ A modern, professional website for Coral Bricks AI, built with React, TypeScript
 - **SEO Optimized**: Proper meta tags and semantic HTML
 - **Legal Pages**: Comprehensive Privacy Policy and Terms of Service
 - **Contact Form**: Functional contact form with validation
-- **Professional Branding**: Consistent branding throughout the site
+- **Infrastructure Focus**: Content focused on AI agent and web app deployment platform
+- **Chat Interface Integration**: Emphasis on chat interface development workflow
 
 ## 🛠️ Tech Stack
 
@@ -115,22 +116,22 @@ End User License Agreement covering:
 ## 🎯 Pages Overview
 
 ### Home
-- Hero section with compelling value proposition
-- Feature highlights with icons
-- Call-to-action sections
+- Hero section with "Reliable Infrastructure for Modern Makers" theme
+- Feature highlights focused on AI agent infrastructure and chat interface development
+- Call-to-action sections for building and deploying
 - Modern gradient backgrounds
 
 ### About
-- Company story and mission
-- Team member profiles
-- Core values
-- Company statistics
+- Infrastructure platform story and mission
+- Team member profiles focused on infrastructure and developer experience
+- Core values for modern makers
+- Platform statistics and capabilities
 
 ### Services
-- Comprehensive service offerings
-- Development process
-- Industry coverage
-- Service features and benefits
+- Infrastructure platform offerings (AI agents, web apps, APIs)
+- Simple deployment process from chat interface
+- Application types supported
+- Platform features and benefits
 
 ### Contact
 - Contact form with validation
