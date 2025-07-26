@@ -1,46 +1,202 @@
-# Getting Started with Create React App
+# Coral Bricks AI - Website
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A modern, professional website for Coral Bricks AI, built with React, TypeScript, and Tailwind CSS.
 
-## Available Scripts
+## 🚀 Features
 
-In the project directory, you can run:
+- **Modern Design**: Clean, professional design with coral and brick color scheme
+- **Responsive**: Fully responsive design that works on all devices
+- **Animations**: Smooth animations using Framer Motion
+- **SEO Optimized**: Proper meta tags and semantic HTML
+- **Legal Pages**: Comprehensive Privacy Policy and Terms of Service
+- **Contact Form**: Functional contact form with validation
+- **Professional Branding**: Consistent branding throughout the site
 
-### `npm start`
+## 🛠️ Tech Stack
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- **React 18** - Modern React with hooks
+- **TypeScript** - Type-safe development
+- **Tailwind CSS** - Utility-first CSS framework
+- **React Router** - Client-side routing
+- **Framer Motion** - Animation library
+- **Heroicons** - Beautiful SVG icons
+- **Headless UI** - Accessible UI components
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## 📁 Project Structure
 
-### `npm test`
+```
+src/
+├── components/          # Reusable components
+│   ├── Navbar.tsx      # Navigation component
+│   └── Footer.tsx      # Footer component
+├── pages/              # Page components
+│   ├── Home.tsx        # Homepage
+│   ├── About.tsx       # About page
+│   ├── Services.tsx    # Services page
+│   ├── Contact.tsx     # Contact page
+│   ├── PrivacyPolicy.tsx # Privacy Policy
+│   └── TermsOfService.tsx # Terms of Service
+├── App.tsx             # Main app component
+├── index.tsx           # App entry point
+└── index.css           # Global styles and Tailwind imports
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## 🎨 Design System
 
-### `npm run build`
+### Colors
+- **Coral**: Primary brand color (#e15a3a)
+- **Brick**: Secondary brand color (#c23d3d)
+- **Gray**: Neutral colors for text and backgrounds
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Typography
+- **Font**: Inter (Google Fonts)
+- **Weights**: 300, 400, 500, 600, 700
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Components
+- Custom button styles with hover effects
+- Responsive grid layouts
+- Consistent spacing and padding
+- Smooth transitions and animations
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## 🚀 Getting Started
 
-### `npm run eject`
+### Prerequisites
+- Node.js (v16 or higher)
+- npm or yarn
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+### Installation
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+1. Clone the repository:
+```bash
+git clone <repository-url>
+cd coralbricks
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+2. Install dependencies:
+```bash
+npm install
+```
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+3. Start the development server:
+```bash
+npm start
+```
 
-## Learn More
+4. Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### Available Scripts
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+- `npm start` - Runs the app in development mode
+- `npm run build` - Builds the app for production
+- `npm test` - Launches the test runner
+- `npm run eject` - Ejects from Create React App (not recommended)
+
+## 📄 Legal Pages
+
+### Privacy Policy
+Comprehensive privacy policy covering:
+- Data collection and usage
+- AI and machine learning data handling
+- User rights and choices
+- Security measures
+- International data transfers
+- Compliance with data protection regulations
+
+### Terms of Service (EULA)
+End User License Agreement covering:
+- License grant and restrictions
+- Acceptable use policy
+- Intellectual property rights
+- Payment terms
+- Liability limitations
+- Termination conditions
+- Dispute resolution
+
+## 🎯 Pages Overview
+
+### Home
+- Hero section with compelling value proposition
+- Feature highlights with icons
+- Call-to-action sections
+- Modern gradient backgrounds
+
+### About
+- Company story and mission
+- Team member profiles
+- Core values
+- Company statistics
+
+### Services
+- Comprehensive service offerings
+- Development process
+- Industry coverage
+- Service features and benefits
+
+### Contact
+- Contact form with validation
+- Company contact information
+- FAQ section
+- Business hours and location
+
+## 🔧 Customization
+
+### Colors
+Update the color scheme in `tailwind.config.js`:
+```javascript
+colors: {
+  coral: {
+    // Custom coral color palette
+  },
+  brick: {
+    // Custom brick color palette
+  }
+}
+```
+
+### Content
+- Update company information in components
+- Modify service offerings in `Services.tsx`
+- Update contact details in `Contact.tsx`
+- Customize legal content in Privacy Policy and Terms of Service
+
+### Styling
+- Modify component styles in individual files
+- Update global styles in `src/index.css`
+- Add new Tailwind utilities as needed
+
+## 📱 Responsive Design
+
+The website is fully responsive with breakpoints:
+- **Mobile**: < 768px
+- **Tablet**: 768px - 1024px
+- **Desktop**: > 1024px
+
+## 🚀 Deployment
+
+### Build for Production
+```bash
+npm run build
+```
+
+### Deploy Options
+- **Netlify**: Drag and drop the `build` folder
+- **Vercel**: Connect your GitHub repository
+- **AWS S3**: Upload build files to S3 bucket
+- **GitHub Pages**: Use gh-pages package
+
+## 📞 Support
+
+For questions or support, contact:
+- Email: hello@coralbricks.ai
+- Phone: +1 (555) 123-4567
+
+## 📄 License
+
+This project is proprietary to Coral Bricks AI. All rights reserved.
+
+## 🔄 Updates
+
+- **v1.0.0** - Initial release with all core pages
+- Professional design and branding
+- Legal compliance documentation
+- Responsive and accessible design
