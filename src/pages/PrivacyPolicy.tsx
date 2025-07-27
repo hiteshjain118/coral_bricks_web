@@ -20,11 +20,7 @@ const PrivacyPolicy: React.FC = () => {
               </span>
             </h1>
             <p className="text-xl text-gray-600 leading-relaxed">
-              Last updated: {new Date().toLocaleDateString('en-US', { 
-                year: 'numeric', 
-                month: 'long', 
-                day: 'numeric' 
-              })}
+              Last updated: July 1, 2025
             </p>
           </motion.div>
         </div>
@@ -128,7 +124,7 @@ const PrivacyPolicy: React.FC = () => {
                   We implement appropriate technical and organizational security measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction. These measures include:
                 </p>
                 <ul className="list-disc pl-6 text-gray-600 space-y-2">
-                  <li>Encryption of data in transit and at rest</li>
+                  <li>Not persisting sensitive data in our systems</li>
                   <li>Regular security assessments and updates</li>
                   <li>Access controls and authentication measures</li>
                   <li>Employee training on data protection</li>
@@ -215,7 +211,7 @@ const PrivacyPolicy: React.FC = () => {
                     <strong>Coral Bricks AI</strong>
                   </p>
                   <p className="text-gray-600 mb-2">
-                    Email: privacy@coralbricks.ai
+                    Email: policy@coralbricks.ai
                   </p>
                   <p className="text-gray-600 mb-2">
                     Phone: +1 (555) 123-4567

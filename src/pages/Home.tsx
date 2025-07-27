@@ -20,11 +20,11 @@ const Home: React.FC = () => {
       title: 'Conversational Interface',
       description: 'Create AI agents through your chat window with our intuitive development tools.'
     },
-    {
-      icon: LockClosedIcon,
-      title: 'AI Guardrails',
-      description: 'Eliminate hallucinations and create secure and compliant agents with built-in protections.'
-    },
+              {
+            icon: LockClosedIcon,
+            title: 'AI Guardrails',
+            description: 'Eliminate hallucinations with CI/CD, human in the loop development and built in security and compliance protections.'
+          },
     {
       icon: RocketLaunchIcon,
       title: 'One-Click Deployment',
@@ -43,19 +43,19 @@ const Home: React.FC = () => {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
             >
-              <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
-                Reliable Infrastructure for{' '}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-coral-600 to-brick-600">
-                  Modern Makers
-                </span>
-              </h1>
+                      <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
+          Build safe, smart AI agents—{' '}
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-coral-600 to-brick-600">
+            no code, no worries
+          </span>
+        </h1>
               <p className="text-xl text-gray-600 mb-8 leading-relaxed">
                 Easily build and deploy reliable AI agents and web apps for your business on scalable, 
                 secure and compliant infrastructure—right from your chat interface.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link to="/contact" className="btn-primary text-center">
-                  Start Building
+                  Join the Waitlist
                 </Link>
                 <Link to="/about" className="btn-secondary text-center">
                   Learn More

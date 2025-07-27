@@ -20,11 +20,7 @@ const TermsOfService: React.FC = () => {
               </span>
             </h1>
             <p className="text-xl text-gray-600 leading-relaxed">
-              End User License Agreement (EULA) - Last updated: {new Date().toLocaleDateString('en-US', { 
-                year: 'numeric', 
-                month: 'long', 
-                day: 'numeric' 
-              })}
+              End User License Agreement (EULA) - Last updated: July 1, 2025
             </p>
           </motion.div>
         </div>
@@ -250,9 +246,9 @@ const TermsOfService: React.FC = () => {
                 <h2 className="text-2xl font-bold text-gray-900 mb-4">15. Contact Information</h2>
                 <p className="text-gray-600 leading-relaxed">
                   If you have any questions about these Terms of Service, please email us at{' '}
-                  <a href="mailto:legal@coralbricks.com" className="text-coral-600 hover:text-coral-700 font-medium underline">
-                    legal@coralbricks.com
-                  </a>.
+                              <a href="mailto:policy@coralbricks.com" className="text-coral-600 hover:text-coral-700 font-medium underline">
+              policy@coralbricks.com
+            </a>.
                 </p>
               </section>
             </div>
