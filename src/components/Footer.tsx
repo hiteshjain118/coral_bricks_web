@@ -9,9 +9,11 @@ const Footer: React.FC = () => {
           {/* Company Info */}
           <div className="col-span-1 md:col-span-2">
             <div className="flex items-center space-x-2 mb-4">
-              <div className="w-8 h-8 bg-gradient-to-br from-coral-500 to-brick-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">CB</span>
-              </div>
+              <img 
+                src="/logo1.png" 
+                alt="Coral Bricks AI Logo" 
+                className="h-8 w-auto"
+              />
               <span className="text-lg font-bold">Coral Bricks AI</span>
             </div>
             <p className="text-gray-300 mb-4 max-w-md">

@@ -19,10 +19,12 @@ const Navbar: React.FC = () => {
       <div className="container-max">
         <div className="flex justify-between items-center py-4">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2">
-            <div className="w-10 h-10 bg-gradient-to-br from-coral-500 to-brick-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-xl">CB</span>
-            </div>
+          <Link to="/" className="flex items-center space-x-3">
+            <img 
+              src="/logo.png" 
+              alt="Coral Bricks AI Logo" 
+              className="h-10 w-auto"
+            />
             <span className="text-xl font-bold text-gray-900">Coral Bricks AI</span>
           </Link>
 
