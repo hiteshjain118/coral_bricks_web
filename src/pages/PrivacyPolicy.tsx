@@ -203,23 +203,15 @@ const PrivacyPolicy: React.FC = () => {
               {/* Contact Information */}
               <section>
                 <h2 className="text-2xl font-bold text-gray-900 mb-4">12. Contact Us</h2>
-                <p className="text-gray-600 leading-relaxed mb-4">
-                  If you have any questions about this Privacy Policy or our data practices, please contact us:
+                <p className="text-gray-600 leading-relaxed">
+                  If you have any questions about this Privacy Policy or our data practices, please contact us at{' '}
+                  <a 
+                    href="mailto:policy@coralbricks.ai" 
+                    className="text-coral-600 hover:text-coral-700 font-medium underline"
+                  >
+                    policy@coralbricks.ai
+                  </a>.
                 </p>
-                <div className="bg-gray-50 p-6 rounded-lg">
-                  <p className="text-gray-600 mb-2">
-                    <strong>Coral Bricks AI</strong>
-                  </p>
-                  <p className="text-gray-600 mb-2">
-                    Email: policy@coralbricks.ai
-                  </p>
-                  <p className="text-gray-600 mb-2">
-                    Phone: +1 (555) 123-4567
-                  </p>
-                  <p className="text-gray-600">
-                    Address: 123 AI Boulevard, Tech City, TC 12345
-                  </p>
-                </div>
               </section>
             </div>
           </motion.div>
