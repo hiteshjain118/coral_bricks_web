@@ -12,14 +12,28 @@ const Agents: React.FC = () => {
       name: 'Dynamic Pricing Agent',
       description: 'Automatically analyze and optimize pricing strategies using QuickBooks data and market insights and get a report in Asana.',
       icon: CurrencyDollarIcon,
-      subdomain: 'paqa.coralbricks.ai',
+      subdomain: 'pa.coralbricks.ai',
       features: [
         'QuickBooks integration',
         'Create task in Asana',
         'Competitive pricing',
         'Revenue optimization'
       ],
-      status: 'active'
+      status: 'coming-soon'
+    },
+    {
+      id: 'concierge',
+      name: 'Concierge Agent',
+      description: 'Your personal AI assistant for customer service, appointment scheduling, and general business support with natural language processing.',
+      icon: CurrencyDollarIcon,
+      subdomain: 'concierge.coralbricks.ai',
+      features: [
+        '24/7 customer support',
+        'Appointment scheduling',
+        'Multi language processing',
+        'Multi-channel integration'
+      ],
+      status: 'coming-soon'
     }
   ];
 
@@ -67,7 +81,7 @@ const Agents: React.FC = () => {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.3 + index * 0.1 }}
-                className="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden hover:shadow-lg transition-shadow duration-300"
+                className="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden hover:shadow-lg transition-shadow duration-300 mb-6"
               >
                 <div className="p-6">
                   {/* Header Row */}
