@@ -14,6 +14,7 @@ const Navbar: React.FC = () => {
   ];
 
   const isActive = (path: string) => location.pathname === path;
+  const isAuthenticatedPage = location.pathname === '/agents' || location.pathname === '/create';
 
   return (
     <nav className="bg-white shadow-lg sticky top-0 z-50">
@@ -29,22 +30,39 @@ const Navbar: React.FC = () => {
             <span className="text-xl font-bold text-gray-900">Coral Bricks AI</span>
           </Link>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
-            {navigation.map((item) => (
-              <Link
-                key={item.name}
-                to={item.href}
-                className={`text-sm font-medium transition-colors duration-200 ${
-                  isActive(item.href)
-                    ? 'text-coral-600 border-b-2 border-coral-600'
-                    : 'text-gray-700 hover:text-coral-600'
-                }`}
-              >
-                {item.name}
-              </Link>
-            ))}
-          </div>
+          {/* Desktop Navigation - Only on non-authenticated pages */}
+          {!isAuthenticatedPage && (
+            <div className="hidden md:flex items-center space-x-8">
+              {navigation.map((item) => (
+                <Link
+                  key={item.name}
+                  to={item.href}
+                  className={`text-sm font-medium transition-colors duration-200 ${
+                    isActive(item.href)
+                      ? 'text-coral-600 border-b-2 border-coral-600'
+                      : 'text-gray-700 hover:text-coral-600'
+                  }`}
+                >
+                  {item.name}
+                </Link>
+              ))}
+            </div>
+          )}
+
+          {/* User Profile - Only on authenticated pages */}
+          {isAuthenticatedPage && (
+            <div className="hidden md:flex items-center space-x-3">
+              <div className="flex items-center space-x-2">
+                <div className="w-8 h-8 bg-gradient-to-r from-coral-500 to-brick-600 rounded-full flex items-center justify-center">
+                  <span className="text-white text-sm font-medium">HJ</span>
+                </div>
+                <div className="text-sm">
+                  <p className="font-medium text-gray-900">Hitesh Jain</p>
+                  <p className="text-gray-500">Logged in</p>
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* Mobile menu button */}
           <div className="md:hidden">
@@ -65,20 +83,34 @@ const Navbar: React.FC = () => {
         {isOpen && (
           <div className="md:hidden">
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white border-t border-gray-200">
-              {navigation.map((item) => (
-                <Link
-                  key={item.name}
-                  to={item.href}
-                  className={`block px-3 py-2 text-base font-medium transition-colors duration-200 ${
-                    isActive(item.href)
-                      ? 'text-coral-600 bg-coral-50'
-                      : 'text-gray-700 hover:text-coral-600 hover:bg-gray-50'
-                  }`}
-                  onClick={() => setIsOpen(false)}
-                >
-                  {item.name}
-                </Link>
-              ))}
+              {!isAuthenticatedPage ? (
+                // Navigation links for non-authenticated pages
+                navigation.map((item) => (
+                  <Link
+                    key={item.name}
+                    to={item.href}
+                    className={`block px-3 py-2 text-base font-medium transition-colors duration-200 ${
+                      isActive(item.href)
+                        ? 'text-coral-600 bg-coral-50'
+                        : 'text-gray-700 hover:text-coral-600 hover:bg-gray-50'
+                    }`}
+                    onClick={() => setIsOpen(false)}
+                  >
+                    {item.name}
+                  </Link>
+                ))
+              ) : (
+                // User profile for authenticated pages
+                <div className="flex items-center space-x-3 px-3 py-2">
+                  <div className="w-8 h-8 bg-gradient-to-r from-coral-500 to-brick-600 rounded-full flex items-center justify-center">
+                    <span className="text-white text-sm font-medium">HJ</span>
+                  </div>
+                  <div className="text-sm">
+                    <p className="font-medium text-gray-900">Hitesh Jain</p>
+                    <p className="text-gray-500">Logged in</p>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         )}
