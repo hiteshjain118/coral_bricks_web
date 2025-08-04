@@ -21,7 +21,7 @@ interface MockMessage {
 
 const Create: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
-  const [showGeneratedAgent, setShowGeneratedAgent] = useState(true);
+  const [showGeneratedAgent, setShowGeneratedAgent] = useState(false);
   const hasInitialMessagesLoaded = React.useRef(false);
 
   // Load mock conversation
