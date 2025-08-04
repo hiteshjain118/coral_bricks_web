@@ -8,7 +8,10 @@ import {
   SparklesIcon,
   CurrencyDollarIcon,
   CubeIcon,
-  ChatBubbleLeftRightIcon
+  ChatBubbleLeftRightIcon,
+  UserGroupIcon,
+  LockClosedIcon,
+  RocketLaunchIcon
 } from '@heroicons/react/24/outline';
 
 interface Agent {
@@ -147,7 +150,7 @@ const Agents: React.FC = () => {
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, delay: 0.3 + index * 0.1 }}
-      className="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden hover:shadow-lg transition-shadow duration-300 mb-6"
+      className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 mb-6 transform hover:-translate-y-1"
     >
       <div className="p-6">
         {/* Header Row */}
@@ -220,14 +223,10 @@ const Agents: React.FC = () => {
             className="text-center max-w-4xl mx-auto"
           >
             <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
-              AI{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-coral-600 to-brick-600">
-                Agents
-              </span>
+              Automate Business Workflows Through Natural Language
             </h1>
             <p className="text-xl text-gray-600 leading-relaxed mb-8">
-              Specialized AI agents designed to automate and optimize your business workflows. 
-              Each agent is built for specific use cases and integrates seamlessly with your existing tools.
+              Easily build and deploy secure, compliant and custom AI agents—no code, no drag-and-drop
             </p>
             <div className="flex justify-center">
               <button
@@ -239,6 +238,69 @@ const Agents: React.FC = () => {
               </button>
             </div>
           </motion.div>
+        </div>
+      </section>
+
+      {/* Agent Features Grid */}
+      <section className="section-padding">
+        <div className="container-max">
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              Why Choose Our AI Agents?
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Build with AI, set guardrails for product logic, security, and compliance. 
+              Deploy with confidence on our scalable platform.
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+            {[
+              {
+                icon: UserGroupIcon,
+                title: 'Custom AI',
+                description: 'Personalized agents built for your specific business needs'
+              },
+              {
+                icon: ChatBubbleLeftRightIcon,
+                title: 'Natural Language',
+                description: 'Create agents through conversation, not complex configurations'
+              },
+              {
+                icon: LockClosedIcon,
+                title: 'Security & Compliance',
+                description: 'Enterprise-grade security built into every agent'
+              },
+              {
+                icon: RocketLaunchIcon,
+                title: 'One-Click Deploy',
+                description: 'Deploy and scale your agents with confidence'
+              }
+            ].map((feature, index) => (
+              <motion.div
+                key={feature.title}
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: index * 0.1 }}
+                viewport={{ once: true }}
+                className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 border border-gray-100 text-center"
+              >
+                <feature.icon className="h-10 w-10 text-coral-600 mb-3 mx-auto" />
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                  {feature.title}
+                </h3>
+                <p className="text-gray-600 text-sm leading-relaxed">
+                  {feature.description}
+                </p>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -341,6 +403,32 @@ const Agents: React.FC = () => {
               )}
             </motion.div>
           </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="bg-gradient-to-r from-coral-600 to-brick-600 text-white section-padding">
+        <div className="container-max text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+          >
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">
+              Ready to Build Your Own Agent?
+            </h2>
+            <p className="text-xl mb-8 opacity-90 max-w-2xl mx-auto">
+              Create custom AI agents that automate your business workflows. 
+              No coding required—just describe what you need.
+            </p>
+            <button
+              onClick={() => window.open('/create', '_blank')}
+              className="bg-white text-coral-600 hover:bg-gray-100 font-semibold py-3 px-8 rounded-lg transition-colors duration-200 inline-block"
+            >
+              Start Building
+            </button>
+          </motion.div>
         </div>
       </section>
     </div>

@@ -385,6 +385,16 @@ const Create: React.FC = () => {
                 Personalize communication
               </button>
             );
+          case 'User acceptance test':
+            return (
+              <button
+                key={index}
+                onClick={() => handleCommentaryClick('User acceptance test')}
+                className="inline-block px-3 py-1 bg-emerald-500 text-white text-xs rounded-md mr-2 font-bold border border-emerald-600 shadow-sm hover:bg-emerald-600 transition-colors cursor-pointer"
+              >
+                User acceptance test
+              </button>
+            );
           case 'Plan approved':
             return (
               <button
@@ -484,7 +494,7 @@ const Create: React.FC = () => {
           {/* Left Panel - Chat Window */}
           <div className="w-3/5 bg-white border-r border-gray-200 flex flex-col min-h-0">
             {/* Chat Header */}
-            <div className="p-2 border-b border-gray-200">
+            <div className="p-2 border-b border-gray-200 sticky top-0 bg-white z-10">
               <div className="flex items-center space-x-3">
                 <div className="w-6 h-6 bg-gradient-to-r from-coral-500 to-brick-600 rounded-full flex items-center justify-center">
                   <ChatBubbleLeftRightIcon className="w-3 h-3 text-white" />
@@ -560,9 +570,15 @@ const Create: React.FC = () => {
           {/* Right Panel - AI Builder */}
           <div className="w-2/5 bg-white flex flex-col min-h-0">
             {/* Builder Header */}
-            <div className="p-2 border-b border-gray-200">
+            <div className="p-2 border-b border-gray-200 sticky top-0 bg-white z-10">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-3">
+                  <button
+                    onClick={() => setShowGeneratedAgent(!showGeneratedAgent)}
+                    className="px-3 py-1 text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-md transition-colors duration-200"
+                  >
+                    {showGeneratedAgent ? 'Hide' : 'Show'}
+                  </button>
                   <div className="w-6 h-6 bg-gradient-to-r from-purple-500 to-indigo-600 rounded-full flex items-center justify-center">
                     <SparklesIcon className="w-3 h-3 text-white" />
                   </div>
@@ -571,10 +587,10 @@ const Create: React.FC = () => {
                   </div>
                 </div>
                 <button
-                  onClick={() => setShowGeneratedAgent(!showGeneratedAgent)}
-                  className="px-3 py-1 text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-md transition-colors duration-200"
+                  onClick={() => console.log('Publish button clicked')}
+                  className="px-3 py-1 text-xs bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-md hover:from-green-700 hover:to-emerald-700 transition-colors duration-200 font-medium"
                 >
-                  {showGeneratedAgent ? 'Hide' : 'Show'}
+                  Publish
                 </button>
               </div>
             </div>

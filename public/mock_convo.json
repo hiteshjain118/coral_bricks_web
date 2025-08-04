@@ -41,7 +41,7 @@
   },
   {
     "role": "agent",
-    "content": "Continuing! I assume you would want markups per product. I see there are two product name columns in the data. Web search showed me to use ProductName, but there's FullyQualifiedProductName also. Did you have a particular preference?[Smart assumption][Web search][Quickbooks schema fetch][roactive question]"
+    "content": "Continuing! I assume you would want markups per product. I see there are two product name columns in the data. Web search showed me to use ProductName, but there's FullyQualifiedProductName also. Did you have a particular preference?[Smart assumption][Web search][Quickbooks schema fetch][Proactive question]"
   },
   {
     "role": "user",
@@ -69,7 +69,7 @@
   },
   {
     "role": "agent",
-    "content": "I know you like to see a summary in the email body and a detailed spreadsheet. I also have Mailgun integration. Let me pull last week's data and send you an example report. Please check your inbox and let me know if you'd like to make any changes[Personalize communication]"
+    "content": "I know you like to see a summary in the email body and a detailed spreadsheet. I also have Mailgun integration. Let me pull last week's data and send you an example report. Please check your inbox and let me know if you'd like to make any changes[Personalize communication][User acceptance test]"
   },
   {
     "role": "user",
