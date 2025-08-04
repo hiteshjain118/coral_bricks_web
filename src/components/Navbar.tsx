@@ -15,19 +15,22 @@ const Navbar: React.FC = () => {
 
   const isActive = (path: string) => location.pathname === path;
   const isAuthenticatedPage = location.pathname === '/agents' || location.pathname === '/create';
+  const isCreatePage = location.pathname === '/create';
 
   return (
-    <nav className="bg-white shadow-lg sticky top-0 z-50">
-      <div className="container-max">
-        <div className="flex justify-between items-center py-4">
+    <nav className="bg-white shadow-lg sticky top-0 z-50 w-full">
+      <div className="w-full px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center py-2 w-full">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-3">
             <img 
               src="/logo.png" 
               alt="Coral Bricks AI Logo" 
-              className="h-10 w-auto"
+              className="h-8 w-auto"
             />
-            <span className="text-xl font-bold text-gray-900">Coral Bricks AI</span>
+            <span className="text-lg font-bold text-gray-900">
+              {isCreatePage ? 'Agent Builder' : 'Coral Bricks AI'}
+            </span>
           </Link>
 
           {/* Desktop Navigation - Only on non-authenticated pages */}

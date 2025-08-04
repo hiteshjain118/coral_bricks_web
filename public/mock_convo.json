@@ -1,0 +1,74 @@
+[
+  {
+    "role": "agent",
+    "content": "Hi! Tell me what tedious work you need help with. I will help you build an agent to do it for you. [Welcome]"
+  },
+  {
+    "role": "user",
+    "content": "I want help with my Quickbooks work."
+  },
+  {
+    "role": "user",
+    "content": "I build a report every day to understand my markups between the purchase price and the selling price. I pull this data from Quickbooks and use excel to analyze it.[User Intent]"
+  },
+  {
+    "role": "agent",
+    "content": "Great! Let me show the high level overview of the agent I will build for you. I may ask you for some information and request you for authentication.[Agent plan]"
+  },
+  {
+    "role": "user",
+    "content": "Yes, I can do that. Please go ahead."
+  },
+  {
+    "role": "agent",
+    "content": "One moment please..."
+  },
+  {
+    "role": "agent",
+    "content": "I have created the agent for you in the Agent Builder UI. I need to connect to your Quickbooks account. My connection is secure and you can revoke access anytime by going the agent manager UI or Quickbooks UI. <Securely connect to Quickbooks>"
+  },
+  {
+    "role": "agent",
+    "content": "Thank you. I have access to your Quickbooks account. I assume you would want markups per product. I see there are two product name columns in the data. Web search showed me to use ProductName, but there's FullyQualified Product name also. Did you have a particular preference?[Web search][Quickbooks schema fetch][Clarifying question]"
+  },
+  {
+    "role": "user",
+    "content": "I'm not sure. Here's an example sheet that I have been filling manually by pulling initial reports from the UI. Can you figure it out? <Spreadsheet> [User expectation that agent learns from their previous solution]"
+  },
+  {
+    "role": "agent",
+    "content": "FullyQualifiedProductNames match with your sheet. So let us use that column."
+  },
+  {
+    "role": "agent",
+    "content": "I also noticed multiple transations per product. I could aggregate them and take the daily average or did you want that handled differently?[Integration test] [Clarifying question]"
+  },
+  {
+    "role": "user",
+    "content": "Good catch! I want one row per transaction. So let us not aggregate.[User guidance]"
+  },
+  {
+    "role": "agent",
+    "content": "Understood. I'm now able to generate the markups per product. Moving on to the next step, which is to send you the report. When do you need the daily email?[Clarifying question]"
+  },
+  {
+    "role": "user",
+    "content": "Great! I need it at 5.30 PM.[User guidance]"
+  },
+  {
+    "role": "agent",
+    "content": "I know you like to see a summary in the email body and a detailed spreadsheet. I also have Mailgun integration. Let me pull last week's data and send you an example report. Please check your inbox and let me know if you'd like to make any changes[Memory fetched]"
+  },
+  {
+    "role": "user",
+    "content": "Great! I checked my inbox. Can you add transaction date in the email title so it is easier to identify in my inbox?[User guidance]"
+  },
+  {
+    "role": "agent",
+    "content": "Absolutely! I got that done for you. Is there anything else you'd like to change?"
+  },
+  {
+    "role": "user",
+    "content": "No, that's perfect. Thank you for your help. I will be waiting for the report."
+  }
+]
