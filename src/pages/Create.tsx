@@ -22,6 +22,7 @@ interface MockMessage {
 const Create: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [showGeneratedAgent, setShowGeneratedAgent] = useState(true);
+  const hasInitialMessagesLoaded = React.useRef(false);
 
   // Load mock conversation
   useEffect(() => {
@@ -38,6 +39,10 @@ const Create: React.FC = () => {
         }));
         
         setMessages(convertedMessages);
+        // Delay setting the ref to prevent auto-scroll on initial load
+        setTimeout(() => {
+          hasInitialMessagesLoaded.current = true;
+        }, 500);
       } catch (error) {
         console.error('Error loading mock conversation:', error);
         // Fallback to default message
@@ -49,15 +54,21 @@ const Create: React.FC = () => {
             timestamp: new Date()
           }
         ]);
+        // Delay setting the ref to prevent auto-scroll on initial load
+        setTimeout(() => {
+          hasInitialMessagesLoaded.current = true;
+        }, 500);
       }
     };
 
     loadMockConversation();
   }, []);
 
-  // Auto-scroll to bottom when messages change
+  // Auto-scroll to bottom when messages change (but not on initial load)
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (hasInitialMessagesLoaded.current) {
+      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }
   }, [messages]);
   const [inputMessage, setInputMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
