@@ -659,16 +659,18 @@ const Create: React.FC = () => {
                       </svg>
                     </div>
                     
-                    {/* Generate Step */}
-                    <div className="flex items-center justify-center">
-                      <div className="flex items-center space-x-2">
-                        <img src="/logo.png" alt="Coral Bricks AI" className="w-5 h-5" />
-                        <img src="/openai_logo.webp" alt="OpenAI" className="w-5 h-5" />
-                        <div className="bg-purple-500 text-white px-4 py-2 rounded-lg font-medium text-sm">
-                          Generate Email
-                        </div>
+                                      {/* Generate Step */}
+                  <div className="flex items-center justify-center">
+                    <div className="flex items-center space-x-2">
+                      <img src="/logo.png" alt="Coral Bricks AI" className="w-5 h-5" />
+                      <div className="bg-gray-500 text-white px-2 py-1 rounded text-xs font-medium">
+                        BYOM
+                      </div>
+                      <div className="bg-purple-500 text-white px-4 py-2 rounded-lg font-medium text-sm">
+                        Generate Email
                       </div>
                     </div>
+                  </div>
                     
                     {/* Arrow */}
                     <div className="flex justify-center">
