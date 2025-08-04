@@ -135,8 +135,8 @@ const Agents: React.FC = () => {
   };
 
   const handleCloneAgent = (agentId: string) => {
-    // Route to create page for cloning
-    window.open('/create', '_blank');
+    // Route to demo page for cloning
+    window.open('/demo', '_blank');
   };
 
   const handleJoinWaitlist = () => {
@@ -230,7 +230,7 @@ const Agents: React.FC = () => {
             </p>
             <div className="flex justify-center">
               <button
-                onClick={() => window.open('/create', '_blank')}
+                onClick={() => window.open('/demo', '_blank')}
                 className="flex items-center space-x-2 px-8 py-4 bg-gradient-to-r from-coral-600 to-brick-600 text-white rounded-lg font-medium hover:from-coral-700 hover:to-brick-700 transition-all duration-200 shadow-lg hover:shadow-xl"
               >
                 <PlusIcon className="w-5 h-5" />
@@ -423,7 +423,7 @@ const Agents: React.FC = () => {
               No coding required—just describe what you need.
             </p>
             <button
-              onClick={() => window.open('/create', '_blank')}
+              onClick={() => window.open('/demo', '_blank')}
               className="bg-white text-coral-600 hover:bg-gray-100 font-semibold py-3 px-8 rounded-lg transition-colors duration-200 inline-block"
             >
               Start Building

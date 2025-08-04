@@ -14,8 +14,8 @@ const Navbar: React.FC = () => {
   ];
 
   const isActive = (path: string) => location.pathname === path;
-  const isAuthenticatedPage = location.pathname === '/agents' || location.pathname === '/create';
-  const isCreatePage = location.pathname === '/create';
+  const isAuthenticatedPage = location.pathname === '/agents' || location.pathname === '/demo';
+  const isCreatePage = location.pathname === '/demo';
 
   return (
     <nav className="bg-white shadow-lg sticky top-0 z-50 w-full">
