@@ -122,8 +122,10 @@ const Agents: React.FC = () => {
   ];
 
   const handleGoToAgent = (subdomain: string) => {
-    if (subdomain === 'my-pa.coralbricks.ai') {
-      window.open('https://pa.coralbricks.ai/', '_blank');
+    if (subdomain === 'my-pa.coralbricks.ai' || subdomain === 'my-outreach.coralbricks.ai') {
+      // Button exists but doesn't work for My agents
+      console.log('Manage button clicked for My agent - functionality disabled');
+      return;
     } else {
       window.open(`https://${subdomain}`, '_blank');
     }
