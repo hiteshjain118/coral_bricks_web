@@ -11,13 +11,13 @@ const About: React.FC = () => {
   const values = [
     {
       icon: HeartIcon,
-      title: 'AI-First Design',
-      description: 'Every feature is designed with AI agents in mind, from hallucination prevention to conversational development.'
+      title: 'Natural Language First',
+      description: 'Every feature is designed for natural language interaction, from workflow automation to conversational development.'
     },
     {
       icon: UsersIcon,
       title: 'Modern Maker Focus',
-      description: 'Built specifically for developers and creators who want to deploy AI agents without infrastructure complexity.'
+      description: 'Built specifically for developers and creators who want to automate workflows without infrastructure complexity.'
     },
     {
       icon: GlobeAltIcon,
@@ -27,13 +27,13 @@ const About: React.FC = () => {
     {
       icon: TrophyIcon,
       title: 'Revolutionary Simplicity',
-      description: 'Deploy AI agents through conversation, not complex configurations. Simple, powerful, and reliable.'
+      description: 'Automate workflows through natural language, not complex configurations. Simple, powerful, and reliable.'
     }
   ];
 
   const stats = [
     { number: '10+', label: 'Years Experience' },
-    { number: '100%', label: 'AI Guardrails' },
+    { number: '100%', label: 'Continuous Testing' },
     { number: '1-Click', label: 'Deployment' },
     { number: 'Coming', label: 'Soon' }
   ];
@@ -50,14 +50,10 @@ const About: React.FC = () => {
             className="text-center max-w-4xl mx-auto"
           >
             <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
-              About{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-coral-600 to-brick-600">
-                Our Infrastructure
-              </span>
+              Automate Business Workflows Through Natural Language
             </h1>
             <p className="text-xl text-gray-600 leading-relaxed">
-              Easily build and deploy reliable AI agents and web apps for your business on scalable, 
-              secure and compliant infrastructure—right from your chat interface.
+              Easily build and deploy secure, compliant and custom AI agents—no code, no drag-and-drop
             </p>
           </motion.div>
         </div>
@@ -77,9 +73,9 @@ const About: React.FC = () => {
               </h2>
               <div className="space-y-4 text-gray-600 leading-relaxed">
                 <p>
-                  Founded with a vision to revolutionize how modern makers deploy AI, we recognized that developers 
-                  and creators need infrastructure that eliminates hallucinations, provides built-in protections, 
-                  and scales seamlessly—all accessible through a simple chat interface.
+                  Founded with a vision to revolutionize how businesses automate workflows, we recognized that modern makers 
+                  need a platform that eliminates complexity, provides built-in security and compliance, 
+                  and scales seamlessly—all accessible through natural language.
                 </p>
                 <p>
                   Our team of infrastructure engineers, AI specialists, and compliance experts work together 
@@ -87,9 +83,9 @@ const About: React.FC = () => {
                   the complexity of security, compliance, and deployment.
                 </p>
                 <p>
-                  We believe that deploying AI agents should be as simple as having a conversation. 
-                  That's why we've built infrastructure with AI guardrails, one-click deployment, 
-                  and conversational development—all designed for the modern maker.
+                  We believe that automating business workflows should be as simple as describing what you need. 
+                  That's why we've built a platform with continuous testing, one-click deployment, 
+                  and natural language development—all designed for the modern maker.
                 </p>
               </div>
             </motion.div>
@@ -102,8 +98,7 @@ const About: React.FC = () => {
               <div className="bg-gradient-to-br from-coral-500 to-brick-600 rounded-2xl p-8 text-white">
                 <h3 className="text-2xl font-bold mb-4">Our Mission</h3>
                 <p className="text-lg leading-relaxed opacity-90">
-                  To enable modern makers to easily build and deploy reliable AI agents and web apps on scalable, 
-                  secure and compliant infrastructure—right from their chat interface.
+                  To enable modern makers to easily build and deploy secure, compliant and custom AI agents—no code, no drag-and-drop.
                 </p>
               </div>
             </motion.div>
@@ -222,7 +217,7 @@ const About: React.FC = () => {
               {
                 name: 'Platform Team',
                 role: 'Product & Design',
-                description: 'Focused on creating the most intuitive conversational development experience.'
+                description: 'Focused on creating the most intuitive natural language development experience.'
               }
             ].map((member, index) => (
               <motion.div

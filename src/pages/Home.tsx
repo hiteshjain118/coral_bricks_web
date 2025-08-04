@@ -18,12 +18,12 @@ const Home: React.FC = () => {
     {
       icon: ChatBubbleLeftRightIcon,
       title: 'Conversational Interface',
-      description: 'Create AI agents through your chat window with our intuitive development tools.'
+      description: 'Create AI agents in natural language with our intuitive development tools.'
     },
               {
             icon: LockClosedIcon,
             title: 'AI Guardrails',
-            description: 'Eliminate hallucinations with CI/CD, human in the loop development and built in security and compliance protections.'
+            description: 'Eliminate hallucinations with continuous testing, human in the loop development and built in security and compliance protections.'
           },
     {
       icon: RocketLaunchIcon,
@@ -44,14 +44,10 @@ const Home: React.FC = () => {
               transition={{ duration: 0.8 }}
             >
                       <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
-          Build safe, smart AI agents—{' '}
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-coral-600 to-brick-600">
-            no code, no worries
-          </span>
+          Automate Business Workflows Through Natural Language
         </h1>
               <p className="text-xl text-gray-600 mb-8 leading-relaxed">
-                Easily build and deploy reliable AI agents and web apps for your business on scalable, 
-                secure and compliant infrastructure—right from your chat interface.
+                Easily build and deploy secure, compliant and custom AI agents—no code, no drag-and-drop
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link to="/contact" className="btn-primary text-center">

@@ -53,7 +53,7 @@ const Services: React.FC = () => {
       icon: ShieldCheckIcon,
       title: 'Developer Experience',
       description: 'Tools and workflows designed for modern developers and teams.',
-      features: ['Team Collaboration', 'CI/CD Pipelines', 'API Management', 'Documentation'],
+      features: ['Team Collaboration', 'Continuous Testing Pipelines', 'API Management', 'Documentation'],
       color: 'from-teal-500 to-cyan-500'
     }
   ];

@@ -25,15 +25,27 @@
   },
   {
     "role": "agent",
-    "content": "I have created the agent for you in the Agent Builder UI. I need to connect to your Quickbooks account. My connection is secure and you can revoke access anytime by going the agent manager UI or Quickbooks UI. <Securely connect to Quickbooks>"
-  },
-  {
-    "role": "agent",
-    "content": "Thank you. I have access to your Quickbooks account. I assume you would want markups per product. I see there are two product name columns in the data. Web search showed me to use ProductName, but there's FullyQualified Product name also. Did you have a particular preference?[Web search][Quickbooks schema fetch][Clarifying question]"
+    "content": "I have created the agent for you in the Agent Builder UI. It will send you an email report. Are you okay with that?[Personalize communication]"
   },
   {
     "role": "user",
-    "content": "I'm not sure. Here's an example sheet that I have been filling manually by pulling initial reports from the UI. Can you figure it out? <Spreadsheet> [User expectation that agent learns from their previous solution]"
+    "content": "Yes, that's perfect. Please go ahead.[Plan approved]"
+  },
+  {
+    "role": "agent",
+    "content": "I need to connect to your Quickbooks account. My connection is secure and you can revoke access anytime by going the agent manager UI or Quickbooks UI. <Revokable secure access to Quickbooks>"
+  },
+  {
+    "role": "agent",
+    "content": "Thank you. I have access to your Quickbooks account."
+  },
+  {
+    "role": "agent",
+    "content": "Continuing! I assume you would want markups per product. I see there are two product name columns in the data. Web search showed me to use ProductName, but there's FullyQualifiedProductName also. Did you have a particular preference?[Smart assumption][Web search][Quickbooks schema fetch][roactive question]"
+  },
+  {
+    "role": "user",
+    "content": "I'm not sure. Here's an example sheet that I have been filling manually by pulling initial reports from the UI. Can you figure it out? [Learn from user's prior solution] <Spreadsheet> "
   },
   {
     "role": "agent",
@@ -41,7 +53,7 @@
   },
   {
     "role": "agent",
-    "content": "I also noticed multiple transations per product. I could aggregate them and take the daily average or did you want that handled differently?[Integration test] [Clarifying question]"
+    "content": "I also noticed multiple transations per product. I could aggregate them and take the daily average or did you want that handled differently?[Integration test] [Proactive question]"
   },
   {
     "role": "user",
@@ -49,7 +61,7 @@
   },
   {
     "role": "agent",
-    "content": "Understood. I'm now able to generate the markups per product. Moving on to the next step, which is to send you the report. When do you need the daily email?[Clarifying question]"
+    "content": "Understood. I'm now able to generate the markups per product. Moving on to the next step, which is to send you the report. When do you need the daily email?[Proactive question]"
   },
   {
     "role": "user",
@@ -57,7 +69,7 @@
   },
   {
     "role": "agent",
-    "content": "I know you like to see a summary in the email body and a detailed spreadsheet. I also have Mailgun integration. Let me pull last week's data and send you an example report. Please check your inbox and let me know if you'd like to make any changes[Memory fetched]"
+    "content": "I know you like to see a summary in the email body and a detailed spreadsheet. I also have Mailgun integration. Let me pull last week's data and send you an example report. Please check your inbox and let me know if you'd like to make any changes[Personalize communication]"
   },
   {
     "role": "user",

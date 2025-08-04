@@ -163,6 +163,16 @@ const Create: React.FC = () => {
                 Memory fetched
               </button>
             );
+          case 'User memory fetched':
+            return (
+              <button
+                key={index}
+                onClick={() => handleCommentaryClick('User memory fetched')}
+                className="inline-block px-3 py-1 bg-purple-500 text-white text-xs rounded-md mr-2 font-bold border border-purple-600 shadow-sm hover:bg-purple-600 transition-colors cursor-pointer"
+              >
+                User memory fetched
+              </button>
+            );
           case 'Tool tip':
             return (
               <button
@@ -201,6 +211,36 @@ const Create: React.FC = () => {
                 className="inline-block px-3 py-1 bg-pink-500 text-white text-xs rounded-md mr-2 font-bold border border-pink-600 shadow-sm hover:bg-pink-600 transition-colors cursor-pointer"
               >
                 User expectation that agent learns from their previous solution
+              </button>
+            );
+          case 'Agent learns from user\'s previous solution':
+            return (
+              <button
+                key={index}
+                onClick={() => handleCommentaryClick('Agent learns from user\'s previous solution')}
+                className="inline-block px-3 py-1 bg-pink-500 text-white text-xs rounded-md mr-2 font-bold border border-pink-600 shadow-sm hover:bg-pink-600 transition-colors cursor-pointer"
+              >
+                Agent learns from user's previous solution
+              </button>
+            );
+          case 'Learn from user\'s prior solution':
+            return (
+              <button
+                key={index}
+                onClick={() => handleCommentaryClick('Learn from user\'s prior solution')}
+                className="inline-block px-3 py-1 bg-pink-500 text-white text-xs rounded-md mr-2 font-bold border border-pink-600 shadow-sm hover:bg-pink-600 transition-colors cursor-pointer"
+              >
+                Learn from user's prior solution
+              </button>
+            );
+          case 'Smart assumption':
+            return (
+              <button
+                key={index}
+                onClick={() => handleCommentaryClick('Smart assumption')}
+                className="inline-block px-3 py-1 bg-emerald-500 text-white text-xs rounded-md mr-2 font-bold border border-emerald-600 shadow-sm hover:bg-emerald-600 transition-colors cursor-pointer"
+              >
+                Smart assumption
               </button>
             );
           case 'Welcome':
@@ -293,6 +333,56 @@ const Create: React.FC = () => {
                 Clarifying question
               </button>
             );
+          case 'proactive question':
+            return (
+              <button
+                key={index}
+                onClick={() => handleCommentaryClick('proactive question')}
+                className="inline-block px-3 py-1 bg-orange-500 text-white text-xs rounded-md mr-2 font-bold border border-orange-600 shadow-sm hover:bg-orange-600 transition-colors cursor-pointer"
+              >
+                proactive question
+              </button>
+            );
+          case 'roactive question':
+            return (
+              <button
+                key={index}
+                onClick={() => handleCommentaryClick('roactive question')}
+                className="inline-block px-3 py-1 bg-orange-500 text-white text-xs rounded-md mr-2 font-bold border border-orange-600 shadow-sm hover:bg-orange-600 transition-colors cursor-pointer"
+              >
+                roactive question
+              </button>
+            );
+          case 'Proactive question':
+            return (
+              <button
+                key={index}
+                onClick={() => handleCommentaryClick('Proactive question')}
+                className="inline-block px-3 py-1 bg-orange-500 text-white text-xs rounded-md mr-2 font-bold border border-orange-600 shadow-sm hover:bg-orange-600 transition-colors cursor-pointer"
+              >
+                Proactive question
+              </button>
+            );
+          case 'Personalize communication':
+            return (
+              <button
+                key={index}
+                onClick={() => handleCommentaryClick('Personalize communication')}
+                className="inline-block px-3 py-1 bg-teal-500 text-white text-xs rounded-md mr-2 font-bold border border-teal-600 shadow-sm hover:bg-teal-600 transition-colors cursor-pointer"
+              >
+                Personalize communication
+              </button>
+            );
+          case 'Plan approved':
+            return (
+              <button
+                key={index}
+                onClick={() => handleCommentaryClick('Plan approved')}
+                className="inline-block px-3 py-1 bg-green-500 text-white text-xs rounded-md mr-2 font-bold border border-green-600 shadow-sm hover:bg-green-600 transition-colors cursor-pointer"
+              >
+                Plan approved
+              </button>
+            );
           case 'Integration test':
             return (
               <button
@@ -341,6 +431,16 @@ const Create: React.FC = () => {
                 className="inline-block px-3 py-1 bg-red-500 text-white text-xs rounded-md mr-2 font-bold border border-red-600 shadow-sm hover:bg-red-600 transition-colors cursor-pointer"
               >
                 Securely connect to Quickbooks
+              </button>
+            );
+          case 'Revokable secure access to Quickbooks':
+            return (
+              <button
+                key={index}
+                onClick={() => handleCommentaryClick('Revokable secure access to Quickbooks')}
+                className="inline-block px-3 py-1 bg-red-500 text-white text-xs rounded-md mr-2 font-bold border border-red-600 shadow-sm hover:bg-red-600 transition-colors cursor-pointer"
+              >
+                Revokable secure access to Quickbooks
               </button>
             );
           case 'Publish Agent':
@@ -392,7 +492,7 @@ const Create: React.FC = () => {
                   animate={{ opacity: 1, y: 0 }}
                   className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
                 >
-                  <div className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${
+                  <div className={`max-w-xs lg:max-w-lg xl:max-w-xl px-4 py-2 rounded-lg ${
                     message.sender === 'user' 
                       ? 'bg-gradient-to-r from-coral-600 to-brick-600 text-white' 
                       : 'bg-gray-100 text-gray-900'
@@ -467,8 +567,11 @@ const Create: React.FC = () => {
                 <div className="space-y-4">
                   {/* Trigger */}
                   <div className="flex items-center justify-center">
-                    <div className="bg-emerald-500 text-white px-4 py-2 rounded-lg font-medium text-sm">
-                      Timer Trigger
+                    <div className="flex items-center space-x-2">
+                      <img src="/logo.png" alt="Coral Bricks AI" className="w-5 h-5" />
+                      <div className="bg-emerald-500 text-white px-4 py-2 rounded-lg font-medium text-sm">
+                        Timer Trigger
+                      </div>
                     </div>
                   </div>
                   
@@ -481,11 +584,17 @@ const Create: React.FC = () => {
                   
                   {/* Get Data Step */}
                   <div className="flex items-center justify-center space-x-4">
-                    <div className="bg-green-500 text-white px-3 py-2 rounded-lg font-medium text-xs">
-                      Get Purchase Price
+                    <div className="flex items-center space-x-2">
+                      <img src="/qbo_logo.jpg" alt="QuickBooks" className="w-5 h-5" />
+                      <div className="bg-green-500 text-white px-3 py-2 rounded-lg font-medium text-xs">
+                        Get Purchase Price
+                      </div>
                     </div>
-                    <div className="bg-green-500 text-white px-3 py-2 rounded-lg font-medium text-xs">
-                      Get Selling Price
+                    <div className="flex items-center space-x-2">
+                      <img src="/qbo_logo.jpg" alt="QuickBooks" className="w-5 h-5" />
+                      <div className="bg-green-500 text-white px-3 py-2 rounded-lg font-medium text-xs">
+                        Get Selling Price
+                      </div>
                     </div>
                   </div>
                   
@@ -498,8 +607,11 @@ const Create: React.FC = () => {
                   
                   {/* Compute Step */}
                   <div className="flex items-center justify-center">
-                    <div className="bg-blue-500 text-white px-4 py-2 rounded-lg font-medium text-sm">
-                      Compute Markup
+                    <div className="flex items-center space-x-2">
+                      <img src="/logo.png" alt="Coral Bricks AI" className="w-5 h-5" />
+                      <div className="bg-blue-500 text-white px-4 py-2 rounded-lg font-medium text-sm">
+                        Compute Markup
+                      </div>
                     </div>
                   </div>
                   
@@ -512,8 +624,12 @@ const Create: React.FC = () => {
                   
                   {/* Generate Step */}
                   <div className="flex items-center justify-center">
-                    <div className="bg-purple-500 text-white px-4 py-2 rounded-lg font-medium text-sm">
-                      Generate Email
+                    <div className="flex items-center space-x-2">
+                      <img src="/logo.png" alt="Coral Bricks AI" className="w-5 h-5" />
+                      <img src="/openai_logo.webp" alt="OpenAI" className="w-5 h-5" />
+                      <div className="bg-purple-500 text-white px-4 py-2 rounded-lg font-medium text-sm">
+                        Generate Email
+                      </div>
                     </div>
                   </div>
                   
@@ -526,8 +642,11 @@ const Create: React.FC = () => {
                   
                   {/* Send Step */}
                   <div className="flex items-center justify-center">
-                    <div className="bg-red-500 text-white px-4 py-2 rounded-lg font-medium text-sm">
-                      Send Email
+                    <div className="flex items-center space-x-2">
+                      <img src="/mailgun_logo.png" alt="Mailgun" className="w-5 h-5" />
+                      <div className="bg-red-500 text-white px-4 py-2 rounded-lg font-medium text-sm">
+                        Send Email
+                      </div>
                     </div>
                   </div>
                 </div>
