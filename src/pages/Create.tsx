@@ -21,6 +21,7 @@ interface MockMessage {
 
 const Create: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
+  const [showGeneratedAgent, setShowGeneratedAgent] = useState(true);
 
   // Load mock conversation
   useEffect(() => {
@@ -549,109 +550,119 @@ const Create: React.FC = () => {
           <div className="w-2/5 bg-white flex flex-col min-h-0">
             {/* Builder Header */}
             <div className="p-2 border-b border-gray-200">
-              <div className="flex items-center space-x-3">
-                <div className="w-6 h-6 bg-gradient-to-r from-purple-500 to-indigo-600 rounded-full flex items-center justify-center">
-                  <SparklesIcon className="w-3 h-3 text-white" />
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <div className="w-6 h-6 bg-gradient-to-r from-purple-500 to-indigo-600 rounded-full flex items-center justify-center">
+                    <SparklesIcon className="w-3 h-3 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-gray-900 text-sm">Generated Agent</h3>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="font-semibold text-gray-900 text-sm">Generated Agent</h3>
-                </div>
+                <button
+                  onClick={() => setShowGeneratedAgent(!showGeneratedAgent)}
+                  className="px-3 py-1 text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-md transition-colors duration-200"
+                >
+                  {showGeneratedAgent ? 'Hide' : 'Show'}
+                </button>
               </div>
             </div>
 
             {/* Builder Content */}
-            <div className="flex-1 p-6">
-              <div className="mb-6">
-                
-                {/* Flowchart */}
-                <div className="space-y-4">
-                  {/* Trigger */}
-                  <div className="flex items-center justify-center">
-                    <div className="flex items-center space-x-2">
-                      <img src="/logo.png" alt="Coral Bricks AI" className="w-5 h-5" />
-                      <div className="bg-emerald-500 text-white px-4 py-2 rounded-lg font-medium text-sm">
-                        Timer Trigger
+            {showGeneratedAgent && (
+              <div className="flex-1 p-6">
+                <div className="mb-6">
+                  
+                  {/* Flowchart */}
+                  <div className="space-y-4">
+                    {/* Trigger */}
+                    <div className="flex items-center justify-center">
+                      <div className="flex items-center space-x-2">
+                        <img src="/logo.png" alt="Coral Bricks AI" className="w-5 h-5" />
+                        <div className="bg-emerald-500 text-white px-4 py-2 rounded-lg font-medium text-sm">
+                          Timer Trigger
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  
-                  {/* Arrow */}
-                  <div className="flex justify-center">
-                    <svg className="w-4 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M10 3a1 1 0 011 1v10.586l3.293-3.293a1 1 0 111.414 1.414l-5 5a1 1 0 01-1.414 0l-5-5a1 1 0 111.414-1.414L9 14.586V4a1 1 0 011-1z" clipRule="evenodd" />
-                    </svg>
-                  </div>
-                  
-                  {/* Get Data Step */}
-                  <div className="flex items-center justify-center space-x-4">
-                    <div className="flex items-center space-x-2">
-                      <img src="/qbo_logo.jpg" alt="QuickBooks" className="w-5 h-5" />
-                      <div className="bg-green-500 text-white px-3 py-2 rounded-lg font-medium text-xs">
-                        Get Purchase Price
+                    
+                    {/* Arrow */}
+                    <div className="flex justify-center">
+                      <svg className="w-4 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M10 3a1 1 0 011 1v10.586l3.293-3.293a1 1 0 111.414 1.414l-5 5a1 1 0 01-1.414 0l-5-5a1 1 0 111.414-1.414L9 14.586V4a1 1 0 011-1z" clipRule="evenodd" />
+                      </svg>
+                    </div>
+                    
+                    {/* Get Data Step */}
+                    <div className="flex items-center justify-center space-x-4">
+                      <div className="flex items-center space-x-2">
+                        <img src="/qbo_logo.jpg" alt="QuickBooks" className="w-5 h-5" />
+                        <div className="bg-green-500 text-white px-3 py-2 rounded-lg font-medium text-xs">
+                          Get Purchase Price
+                        </div>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <img src="/qbo_logo.jpg" alt="QuickBooks" className="w-5 h-5" />
+                        <div className="bg-green-500 text-white px-3 py-2 rounded-lg font-medium text-xs">
+                          Get Selling Price
+                        </div>
                       </div>
                     </div>
-                    <div className="flex items-center space-x-2">
-                      <img src="/qbo_logo.jpg" alt="QuickBooks" className="w-5 h-5" />
-                      <div className="bg-green-500 text-white px-3 py-2 rounded-lg font-medium text-xs">
-                        Get Selling Price
+                    
+                    {/* Arrow */}
+                    <div className="flex justify-center">
+                      <svg className="w-4 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M10 3a1 1 0 011 1v10.586l3.293-3.293a1 1 0 111.414 1.414l-5 5a1 1 0 01-1.414 0l-5-5a1 1 0 111.414-1.414L9 14.586V4a1 1 0 011-1z" clipRule="evenodd" />
+                      </svg>
+                    </div>
+                    
+                    {/* Compute Step */}
+                    <div className="flex items-center justify-center">
+                      <div className="flex items-center space-x-2">
+                        <img src="/logo.png" alt="Coral Bricks AI" className="w-5 h-5" />
+                        <div className="bg-blue-500 text-white px-4 py-2 rounded-lg font-medium text-sm">
+                          Compute Markup
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  
-                  {/* Arrow */}
-                  <div className="flex justify-center">
-                    <svg className="w-4 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M10 3a1 1 0 011 1v10.586l3.293-3.293a1 1 0 111.414 1.414l-5 5a1 1 0 01-1.414 0l-5-5a1 1 0 111.414-1.414L9 14.586V4a1 1 0 011-1z" clipRule="evenodd" />
-                    </svg>
-                  </div>
-                  
-                  {/* Compute Step */}
-                  <div className="flex items-center justify-center">
-                    <div className="flex items-center space-x-2">
-                      <img src="/logo.png" alt="Coral Bricks AI" className="w-5 h-5" />
-                      <div className="bg-blue-500 text-white px-4 py-2 rounded-lg font-medium text-sm">
-                        Compute Markup
+                    
+                    {/* Arrow */}
+                    <div className="flex justify-center">
+                      <svg className="w-4 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M10 3a1 1 0 011 1v10.586l3.293-3.293a1 1 0 111.414 1.414l-5 5a1 1 0 01-1.414 0l-5-5a1 1 0 111.414-1.414L9 14.586V4a1 1 0 011-1z" clipRule="evenodd" />
+                      </svg>
+                    </div>
+                    
+                    {/* Generate Step */}
+                    <div className="flex items-center justify-center">
+                      <div className="flex items-center space-x-2">
+                        <img src="/logo.png" alt="Coral Bricks AI" className="w-5 h-5" />
+                        <img src="/openai_logo.webp" alt="OpenAI" className="w-5 h-5" />
+                        <div className="bg-purple-500 text-white px-4 py-2 rounded-lg font-medium text-sm">
+                          Generate Email
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  
-                  {/* Arrow */}
-                  <div className="flex justify-center">
-                    <svg className="w-4 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M10 3a1 1 0 011 1v10.586l3.293-3.293a1 1 0 111.414 1.414l-5 5a1 1 0 01-1.414 0l-5-5a1 1 0 111.414-1.414L9 14.586V4a1 1 0 011-1z" clipRule="evenodd" />
-                    </svg>
-                  </div>
-                  
-                  {/* Generate Step */}
-                  <div className="flex items-center justify-center">
-                    <div className="flex items-center space-x-2">
-                      <img src="/logo.png" alt="Coral Bricks AI" className="w-5 h-5" />
-                      <img src="/openai_logo.webp" alt="OpenAI" className="w-5 h-5" />
-                      <div className="bg-purple-500 text-white px-4 py-2 rounded-lg font-medium text-sm">
-                        Generate Email
-                      </div>
+                    
+                    {/* Arrow */}
+                    <div className="flex justify-center">
+                      <svg className="w-4 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M10 3a1 1 0 011 1v10.586l3.293-3.293a1 1 0 111.414 1.414l-5 5a1 1 0 01-1.414 0l-5-5a1 1 0 111.414-1.414L9 14.586V4a1 1 0 011-1z" clipRule="evenodd" />
+                      </svg>
                     </div>
-                  </div>
-                  
-                  {/* Arrow */}
-                  <div className="flex justify-center">
-                    <svg className="w-4 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M10 3a1 1 0 011 1v10.586l3.293-3.293a1 1 0 111.414 1.414l-5 5a1 1 0 01-1.414 0l-5-5a1 1 0 111.414-1.414L9 14.586V4a1 1 0 011-1z" clipRule="evenodd" />
-                    </svg>
-                  </div>
-                  
-                  {/* Send Step */}
-                  <div className="flex items-center justify-center">
-                    <div className="flex items-center space-x-2">
-                      <img src="/mailgun_logo.png" alt="Mailgun" className="w-5 h-5" />
-                      <div className="bg-red-500 text-white px-4 py-2 rounded-lg font-medium text-sm">
-                        Send Email
+                    
+                    {/* Send Step */}
+                    <div className="flex items-center justify-center">
+                      <div className="flex items-center space-x-2">
+                        <img src="/mailgun_logo.png" alt="Mailgun" className="w-5 h-5" />
+                        <div className="bg-red-500 text-white px-4 py-2 rounded-lg font-medium text-sm">
+                          Send Email
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </div>
