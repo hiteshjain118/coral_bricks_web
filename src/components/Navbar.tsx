@@ -7,14 +7,13 @@ const Navbar: React.FC = () => {
   const location = useLocation();
 
   const navigation = [
-    { name: 'Home', href: '/' },
     { name: 'About', href: '/about' },
     { name: 'Agents', href: '/agents' },
     { name: 'Contact', href: '/contact' },
   ];
 
   const isActive = (path: string) => location.pathname === path;
-  const isAuthenticatedPage = location.pathname === '/agents' || location.pathname === '/demo';
+  const isAuthenticatedPage = location.pathname === '/demo';
   const isCreatePage = location.pathname === '/demo';
 
   return (
@@ -35,21 +34,21 @@ const Navbar: React.FC = () => {
 
           {/* Desktop Navigation - Only on non-authenticated pages */}
           {!isAuthenticatedPage && (
-            <div className="hidden md:flex items-center space-x-8">
-              {navigation.map((item) => (
-                <Link
-                  key={item.name}
-                  to={item.href}
-                  className={`text-sm font-medium transition-colors duration-200 ${
-                    isActive(item.href)
-                      ? 'text-coral-600 border-b-2 border-coral-600'
-                      : 'text-gray-700 hover:text-coral-600'
-                  }`}
-                >
-                  {item.name}
-                </Link>
-              ))}
-            </div>
+          <div className="hidden md:flex items-center space-x-8">
+            {navigation.map((item) => (
+              <Link
+                key={item.name}
+                to={item.href}
+                className={`text-sm font-medium transition-colors duration-200 ${
+                  isActive(item.href)
+                    ? 'text-coral-600 border-b-2 border-coral-600'
+                    : 'text-gray-700 hover:text-coral-600'
+                }`}
+              >
+                {item.name}
+              </Link>
+            ))}
+          </div>
           )}
 
           {/* User Profile - Only on authenticated pages */}
@@ -89,18 +88,18 @@ const Navbar: React.FC = () => {
               {!isAuthenticatedPage ? (
                 // Navigation links for non-authenticated pages
                 navigation.map((item) => (
-                  <Link
-                    key={item.name}
-                    to={item.href}
-                    className={`block px-3 py-2 text-base font-medium transition-colors duration-200 ${
-                      isActive(item.href)
-                        ? 'text-coral-600 bg-coral-50'
-                        : 'text-gray-700 hover:text-coral-600 hover:bg-gray-50'
-                    }`}
-                    onClick={() => setIsOpen(false)}
-                  >
-                    {item.name}
-                  </Link>
+                <Link
+                  key={item.name}
+                  to={item.href}
+                  className={`block px-3 py-2 text-base font-medium transition-colors duration-200 ${
+                    isActive(item.href)
+                      ? 'text-coral-600 bg-coral-50'
+                      : 'text-gray-700 hover:text-coral-600 hover:bg-gray-50'
+                  }`}
+                  onClick={() => setIsOpen(false)}
+                >
+                  {item.name}
+                </Link>
                 ))
               ) : (
                 // User profile for authenticated pages

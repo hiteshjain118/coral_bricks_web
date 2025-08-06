@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { 
   ArrowTopRightOnSquareIcon,
-  UserIcon,
-  UsersIcon,
   PlusIcon,
   SparklesIcon,
   CurrencyDollarIcon,
@@ -26,40 +24,9 @@ interface Agent {
 }
 
 const Agents: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'my-agents' | 'community'>('my-agents');
+  const [activeTab, setActiveTab] = useState<'community'>('community');
 
-  // User's own agents
-  const myAgents: Agent[] = [
-    {
-      id: 'my-pricing',
-      name: 'My Markup Detection Agent',
-      description: 'Streamline your markups by getting a daily email report in your inbox showing the difference between your sales and purchases prices.',
-      icon: CurrencyDollarIcon,
-      subdomain: 'my-pa.coralbricks.ai',
-      features: [
-        'QuickBooks integration',
-        'Your daily report',
-        'Personalize email format',
-        'Email reporting'
-      ],
-      status: 'active',
-      type: 'my-agent'
-    },
-    {
-      id: 'my-outreach',
-      name: 'My Personalized Outreach Agent',
-      description: 'Create personalized outreach campaigns and follow-up sequences based on customer behavior and interaction history.',
-      icon: ChatBubbleLeftRightIcon,
-      subdomain: 'my-outreach.coralbricks.ai',
-      features: [
-        'Sales data from Quickbooks',
-        'Set upsell criteria',
-        'Notify sales teams weekly through email'
-      ],
-      status: 'active',
-      type: 'my-agent'
-    }
-  ];
+
 
   // Community/Platform agents available to clone
   const communityAgents: Agent[] = [
@@ -125,18 +92,13 @@ const Agents: React.FC = () => {
   ];
 
   const handleGoToAgent = (subdomain: string) => {
-    if (subdomain === 'my-pa.coralbricks.ai' || subdomain === 'my-outreach.coralbricks.ai') {
-      // Button exists but doesn't work for My agents
-      console.log('Manage button clicked for My agent - functionality disabled');
-      return;
-    } else {
-      window.open(`https://${subdomain}`, '_blank');
-    }
+    // Route to Contact page
+    window.location.href = '/contact';
   };
 
   const handleCloneAgent = (agentId: string) => {
-    // Route to demo page for cloning
-    window.open('/demo', '_blank');
+    // Route to Contact page
+    window.location.href = '/contact';
   };
 
   const handleJoinWaitlist = () => {
@@ -184,10 +146,11 @@ const Agents: React.FC = () => {
             )}
             {agent.type === 'community' && agent.id === 'concierge' && (
               <button
-                onClick={handleJoinWaitlist}
-                className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-yellow-500 to-orange-500 text-white rounded-lg font-medium hover:from-yellow-600 hover:to-orange-600 transition-all duration-200"
+                onClick={() => handleCloneAgent(agent.id)}
+                className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-lg font-medium hover:from-purple-700 hover:to-indigo-700 transition-all duration-200"
               >
-                <span>Join Waitlist</span>
+                <span>Clone</span>
+                <PlusIcon className="w-4 h-4" />
               </button>
             )}
           </div>
@@ -230,7 +193,7 @@ const Agents: React.FC = () => {
             </p>
             <div className="flex justify-center">
               <button
-                onClick={() => window.open('/demo', '_blank')}
+                onClick={() => window.location.href = '/contact'}
                 className="flex items-center space-x-2 px-8 py-4 bg-gradient-to-r from-coral-600 to-brick-600 text-white rounded-lg font-medium hover:from-coral-700 hover:to-brick-700 transition-all duration-200 shadow-lg hover:shadow-xl"
               >
                 <PlusIcon className="w-5 h-5" />
@@ -304,103 +267,26 @@ const Agents: React.FC = () => {
         </div>
       </section>
 
-      {/* Tab Navigation */}
-      <section className="section-padding">
+      {/* Community Agents Section */}
+      <section className="pt-2 pb-8">
         <div className="container-max">
           <div className="max-w-4xl mx-auto">
-            {/* Tab Buttons */}
-            <div className="flex space-x-1 bg-gray-100 p-1 rounded-lg mb-8">
-              <button
-                onClick={() => setActiveTab('my-agents')}
-                className={`flex items-center space-x-2 px-6 py-3 rounded-lg font-medium transition-all duration-200 ${
-                  activeTab === 'my-agents'
-                    ? 'bg-white text-gray-900 shadow-sm'
-                    : 'text-gray-600 hover:text-gray-900'
-                }`}
-              >
-                <UserIcon className="w-5 h-5" />
-                <span>My Agents</span>
-                {myAgents.length > 0 && (
-                  <span className="bg-coral-100 text-coral-800 text-xs px-2 py-1 rounded-full">
-                    {myAgents.length}
-                  </span>
-                )}
-              </button>
-              <button
-                onClick={() => setActiveTab('community')}
-                className={`flex items-center space-x-2 px-6 py-3 rounded-lg font-medium transition-all duration-200 ${
-                  activeTab === 'community'
-                    ? 'bg-white text-gray-900 shadow-sm'
-                    : 'text-gray-600 hover:text-gray-900'
-                }`}
-              >
-                <UsersIcon className="w-5 h-5" />
-                <span>Community Agents</span>
-                <span className="bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded-full">
-                  {communityAgents.length}
-                </span>
-              </button>
-            </div>
-
-            {/* Tab Content */}
             <motion.div
               key={activeTab}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3 }}
             >
-              {activeTab === 'my-agents' && (
-                <div>
-                  {/* Welcome Header */}
-                  <div className="mb-6 p-4 bg-gradient-to-r from-coral-50 to-brick-50 rounded-lg border border-coral-100">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <h3 className="text-lg font-semibold text-gray-900">Welcome back, Hitesh Jain</h3>
-                        <p className="text-gray-600 text-sm">Manage your personalized AI agents</p>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <div className="w-8 h-8 bg-gradient-to-r from-coral-500 to-brick-600 rounded-full flex items-center justify-center">
-                          <span className="text-white text-sm font-medium">HJ</span>
-                        </div>
-                        <span className="text-sm text-gray-600">Active</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {myAgents.length === 0 ? (
-                    <div className="text-center py-12">
-                      <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <PlusIcon className="w-8 h-8 text-gray-400" />
-                      </div>
-                      <h3 className="text-lg font-semibold text-gray-900 mb-2">No agents yet</h3>
-                      <p className="text-gray-600 mb-6">Clone agents from the community to get started</p>
-                      <button
-                        onClick={() => setActiveTab('community')}
-                        className="px-6 py-3 bg-gradient-to-r from-coral-600 to-brick-600 text-white rounded-lg font-medium hover:from-coral-700 hover:to-brick-700 transition-all duration-200"
-                      >
-                        Browse Community Agents
-                      </button>
-                    </div>
-                  ) : (
-                    <div>
-                      {myAgents.map((agent, index) => renderAgentCard(agent, index))}
-                    </div>
-                  )}
+              <div>
+                <div className="mb-4 p-3 bg-purple-50 rounded-lg">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-1">Community Agents</h3>
+                  <p className="text-gray-600 text-sm">
+                    Clone and customize these pre-built agents for your end to end business needs. 
+                    Personalize agents with your own preferences, data and existing integrations.
+                  </p>
                 </div>
-              )}
-
-              {activeTab === 'community' && (
-                <div>
-                  <div className="mb-6 p-4 bg-purple-50 rounded-lg">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">Community Agents</h3>
-                    <p className="text-gray-600 text-sm">
-                      Clone and customize these pre-built agents for your end to end business needs. 
-                      Personalize agents with your own preferences, data and existing integrations.
-                    </p>
-                  </div>
-                  {communityAgents.map((agent, index) => renderAgentCard(agent, index))}
-                </div>
-              )}
+                {communityAgents.map((agent, index) => renderAgentCard(agent, index))}
+              </div>
             </motion.div>
           </div>
         </div>
@@ -423,7 +309,7 @@ const Agents: React.FC = () => {
               No coding required—just describe what you need.
             </p>
             <button
-              onClick={() => window.open('/demo', '_blank')}
+              onClick={() => window.location.href = '/contact'}
               className="bg-white text-coral-600 hover:bg-gray-100 font-semibold py-3 px-8 rounded-lg transition-colors duration-200 inline-block"
             >
               Start Building
