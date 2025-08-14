@@ -325,7 +325,6 @@ const Demo: React.FC = () => {
               </button>
             );
           case 'clarifying question':
-          case 'Clarifying question':
             return (
               <button
                 key={index}
@@ -346,7 +345,6 @@ const Demo: React.FC = () => {
               </button>
             );
           case 'roactive question':
-          case 'Proactive question':
             return (
               <button
                 key={index}

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { useAuth } from '../contexts/AuthContext';
 import { 
   PaperAirplaneIcon,
   SparklesIcon,
@@ -16,6 +17,7 @@ interface Message {
 }
 
 const Create: React.FC = () => {
+  const { user } = useAuth();
   const [messages, setMessages] = useState<Message[]>([]);
   const [showGeneratedAgent, setShowGeneratedAgent] = useState(false);
   const [sessionId] = useState(() => `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`);
@@ -24,15 +26,16 @@ const Create: React.FC = () => {
 
   // Initialize with welcome message
   useEffect(() => {
+    const displayName = user?.display_name || 'there';
     const welcomeMessage: Message = {
       id: '1',
-      text: "Hi! I'm your AI agent builder. Tell me what kind of agent you'd like to create and I'll help you build it step by step.",
+      text: `Hi ${displayName}! I'm your AI agent builder. Tell me what kind of agent you'd like to create and I'll help you build it step by step.`,
       sender: 'ai',
       timestamp: new Date()
     };
     setMessages([welcomeMessage]);
     hasInitialMessagesLoaded.current = true;
-  }, []);
+  }, [user?.display_name]);
 
   // Auto-scroll to bottom when messages change (but not on initial load)
   useEffect(() => {
@@ -63,11 +66,13 @@ const Create: React.FC = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${user?.access_token}`,
         },
         body: JSON.stringify({
           message: inputMessage,
           session_id: sessionId,
-          user_id: userId
+          user_id: userId,
+          auth_user_id: user?.id
         })
       });
 

@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
+import { Bars3Icon, XMarkIcon, UserIcon } from '@heroicons/react/24/outline';
+import { useAuth } from '../contexts/AuthContext';
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
+  const { user, signOut } = useAuth();
 
   const navigation = [
     { name: 'About', href: '/about' },
@@ -66,6 +68,31 @@ const Navbar: React.FC = () => {
             </div>
           )}
 
+          {/* Authentication UI */}
+          <div className="hidden md:flex items-center space-x-4">
+            {user ? (
+              <div className="flex items-center space-x-3">
+                <div className="flex items-center space-x-2 text-sm text-gray-700">
+                  <UserIcon className="w-4 h-4" />
+                  <span>{user.display_name || user.email}</span>
+                </div>
+                <button
+                  onClick={signOut}
+                  className="px-3 py-2 text-sm text-gray-700 hover:text-coral-600 transition-colors duration-200"
+                >
+                  Sign Out
+                </button>
+              </div>
+            ) : (
+              <Link
+                to="/login"
+                className="px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-coral-600 to-brick-600 rounded-lg hover:from-coral-700 hover:to-brick-700 transition-all duration-200"
+              >
+                Sign In
+              </Link>
+            )}
+          </div>
+
           {/* Mobile menu button */}
           <div className="md:hidden">
             <button
@@ -85,9 +112,8 @@ const Navbar: React.FC = () => {
         {isOpen && (
           <div className="md:hidden">
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white border-t border-gray-200">
-              {!isAuthenticatedPage ? (
-                // Navigation links for non-authenticated pages
-                navigation.map((item) => (
+              {/* Navigation links */}
+              {navigation.map((item) => (
                 <Link
                   key={item.name}
                   to={item.href}
@@ -100,17 +126,39 @@ const Navbar: React.FC = () => {
                 >
                   {item.name}
                 </Link>
-                ))
+              ))}
+              
+              {/* Authentication in mobile menu */}
+              {user ? (
+                <div className="border-t border-gray-200 pt-3 mt-3">
+                  <div className="flex items-center space-x-3 px-3 py-2 mb-2">
+                    <div className="w-8 h-8 bg-gradient-to-r from-coral-500 to-brick-600 rounded-full flex items-center justify-center">
+                      <UserIcon className="w-4 h-4 text-white" />
+                    </div>
+                                      <div className="text-sm">
+                    <p className="font-medium text-gray-900">{user.display_name || user.email}</p>
+                    <p className="text-gray-500">Signed in</p>
+                  </div>
+                  </div>
+                  <button
+                    onClick={() => {
+                      signOut();
+                      setIsOpen(false);
+                    }}
+                    className="w-full text-left px-3 py-2 text-base font-medium text-gray-700 hover:text-coral-600 hover:bg-gray-50 transition-colors duration-200"
+                  >
+                    Sign Out
+                  </button>
+                </div>
               ) : (
-                // User profile for authenticated pages
-                <div className="flex items-center space-x-3 px-3 py-2">
-                  <div className="w-8 h-8 bg-gradient-to-r from-coral-500 to-brick-600 rounded-full flex items-center justify-center">
-                    <span className="text-white text-sm font-medium">HJ</span>
-                  </div>
-                  <div className="text-sm">
-                    <p className="font-medium text-gray-900">Hitesh Jain</p>
-                    <p className="text-gray-500">Logged in</p>
-                  </div>
+                <div className="border-t border-gray-200 pt-3 mt-3">
+                  <Link
+                    to="/login"
+                    className="block px-3 py-2 text-base font-medium text-coral-600 hover:text-coral-700 hover:bg-coral-50 transition-colors duration-200"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    Sign In
+                  </Link>
                 </div>
               )}
             </div>
