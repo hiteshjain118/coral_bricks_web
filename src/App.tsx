@@ -8,6 +8,8 @@ import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsOfService from './pages/TermsOfService';
 import Agents from './pages/Agents';
 import Create from './pages/Create';
+import Demo from './pages/Demo';
+import BookMeeting from './pages/BookMeeting';
 
 function App() {
   return (
@@ -20,7 +22,9 @@ function App() {
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/agents" element={<Agents />} />
-            <Route path="/demo" element={<Create />} />
+            <Route path="/demo" element={<Demo />} />
+            <Route path="/create" element={<Create />} />
+            <Route path="/book_meeting/hitesh" element={<BookMeeting />} />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="/terms-of-service" element={<TermsOfService />} />
           </Routes>

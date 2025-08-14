@@ -3,7 +3,6 @@ import { motion } from 'framer-motion';
 import { 
   PaperAirplaneIcon,
   SparklesIcon,
-  UserIcon,
   ChatBubbleLeftRightIcon
 } from '@heroicons/react/24/outline';
 
@@ -12,56 +11,27 @@ interface Message {
   text: string;
   sender: 'user' | 'ai';
   timestamp: Date;
-}
-
-interface MockMessage {
-  role: 'user' | 'agent';
-  content: string;
+  metadata?: any; // For additional response data
+  flowData?: any; // For flow diagram data
 }
 
 const Create: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [showGeneratedAgent, setShowGeneratedAgent] = useState(false);
+  const [sessionId] = useState(() => `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`);
+  const [userId] = useState(() => Math.floor(Math.random() * 1000000)); // Random user ID
   const hasInitialMessagesLoaded = React.useRef(false);
 
-  // Load mock conversation
+  // Initialize with welcome message
   useEffect(() => {
-    const loadMockConversation = async () => {
-      try {
-        const response = await fetch('/mock_convo.json');
-        const mockData: MockMessage[] = await response.json();
-        
-        const convertedMessages: Message[] = mockData.map((msg, index) => ({
-          id: (index + 1).toString(),
-          text: msg.content,
-          sender: msg.role === 'user' ? 'user' : 'ai',
-          timestamp: new Date(Date.now() - (mockData.length - index) * 60000) // Stagger timestamps
-        }));
-        
-        setMessages(convertedMessages);
-        // Delay setting the ref to prevent auto-scroll on initial load
-        setTimeout(() => {
-          hasInitialMessagesLoaded.current = true;
-        }, 500);
-      } catch (error) {
-        console.error('Error loading mock conversation:', error);
-        // Fallback to default message
-        setMessages([
-          {
-            id: '1',
-            text: "Hi! I'm your AI agent builder. Tell me what kind of agent you'd like to create and I'll help you build it step by step.",
-            sender: 'ai',
-            timestamp: new Date()
-          }
-        ]);
-        // Delay setting the ref to prevent auto-scroll on initial load
-        setTimeout(() => {
-          hasInitialMessagesLoaded.current = true;
-        }, 500);
-      }
+    const welcomeMessage: Message = {
+      id: '1',
+      text: "Hi! I'm your AI agent builder. Tell me what kind of agent you'd like to create and I'll help you build it step by step.",
+      sender: 'ai',
+      timestamp: new Date()
     };
-
-    loadMockConversation();
+    setMessages([welcomeMessage]);
+    hasInitialMessagesLoaded.current = true;
   }, []);
 
   // Auto-scroll to bottom when messages change (but not on initial load)
@@ -88,17 +58,84 @@ const Create: React.FC = () => {
     setInputMessage('');
     setIsLoading(true);
 
-    // Simulate AI response
-    setTimeout(() => {
+    try {
+      const response = await fetch('http://localhost:5002/api/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message: inputMessage,
+          session_id: sessionId,
+          user_id: userId
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      
+      // Log the full response for debugging
+      console.log('Agent Builder Response:', data);
+      
+      // Handle different response formats
+      let responseText = "I'm sorry, I couldn't process your request. Please try again.";
+      
+      if (typeof data === 'string') {
+        responseText = data;
+      } else if (data && typeof data === 'object') {
+        // Handle nested response structure
+        if (data.message && data.message.response_content) {
+          responseText = data.message.response_content;
+        } else if (data.response && data.response.response_content) {
+          responseText = data.response.response_content;
+        } else if (data.message && typeof data.message === 'string') {
+          responseText = data.message;
+        } else if (data.response && typeof data.response === 'string') {
+          responseText = data.response;
+        } else if (data.text) {
+          responseText = typeof data.text === 'string' ? data.text : JSON.stringify(data.text);
+        } else if (data.content) {
+          responseText = typeof data.content === 'string' ? data.content : JSON.stringify(data.content);
+        } else {
+          responseText = JSON.stringify(data);
+        }
+      }
+      
+      // Ensure responseText is always a string
+      if (typeof responseText !== 'string') {
+        responseText = JSON.stringify(responseText);
+      }
+      
+      // Check for flow data in the response
+      const flowData = parseFlowData(responseText);
+      
       const aiMessage: Message = {
         id: (Date.now() + 1).toString(),
-        text: "I understand you want to create an agent. Let me help you build this step by step. What specific functionality should this agent have?",
+        text: responseText,
+        sender: 'ai',
+        timestamp: new Date(),
+        metadata: data, // Store full response data
+        flowData: flowData // Store flow diagram data
+      };
+      
+      setMessages(prev => [...prev, aiMessage]);
+    } catch (error) {
+      console.error('Error sending message:', error);
+      
+      const errorMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        text: "I'm sorry, I'm having trouble connecting to the server. Please check your connection and try again.",
         sender: 'ai',
         timestamp: new Date()
       };
-      setMessages(prev => [...prev, aiMessage]);
+      
+      setMessages(prev => [...prev, errorMessage]);
+    } finally {
       setIsLoading(false);
-    }, 1000);
+    }
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -108,382 +145,172 @@ const Create: React.FC = () => {
     }
   };
 
-  const handleCommentaryClick = (commentary: string) => {
-    console.log('Commentary clicked:', commentary);
-    // You can add specific actions for each commentary type here
-    // For example, show tooltips, expand details, or trigger specific behaviors
-  };
-
-  const renderMessageWithWidgets = (text: string) => {
-    const parts = text.split(/(\[.*?\]|<.*?>)/);
-    return parts.map((part, index) => {
-      if ((part.startsWith('[') && part.endsWith(']')) || (part.startsWith('<') && part.endsWith('>'))) {
-        const widgetType = part.slice(1, -1); // Remove the brackets/angle brackets
-        switch (widgetType) {
-          case 'Connect to Quickbooks':
-            return (
-              <button
-                key={index}
-                className="inline-flex items-center px-3 py-1 bg-green-600 text-white text-xs rounded-md hover:bg-green-700 transition-colors duration-200 mr-2"
-              >
-                <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zm0 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V8zm0 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1v-2z" clipRule="evenodd" />
-                </svg>
-                Connect to Quickbooks
-              </button>
-            );
-          case 'Send Test Report':
-            return (
-              <button
-                key={index}
-                className="inline-flex items-center px-3 py-1 bg-blue-600 text-white text-xs rounded-md hover:bg-blue-700 transition-colors duration-200 mr-2"
-              >
-                <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
-                  <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
-                </svg>
-                Send Test Report
-              </button>
-            );
-          case 'Web search, Quickbooks data fetched':
-            return (
-              <button
-                key={index}
-                onClick={() => handleCommentaryClick('Web search, Quickbooks data fetched')}
-                className="inline-block px-3 py-1 bg-green-500 text-white text-xs rounded-md mr-2 font-bold border border-green-600 shadow-sm hover:bg-green-600 transition-colors cursor-pointer"
-              >
-                Web search, Quickbooks data fetched
-              </button>
-            );
-          case 'Integration tests ran':
-            return (
-              <button
-                key={index}
-                onClick={() => handleCommentaryClick('Integration tests ran')}
-                className="inline-block px-3 py-1 bg-blue-500 text-white text-xs rounded-md mr-2 font-bold border border-blue-600 shadow-sm hover:bg-blue-600 transition-colors cursor-pointer"
-              >
-                Integration tests ran
-              </button>
-            );
-          case 'Memory fetched':
-            return (
-              <button
-                key={index}
-                onClick={() => handleCommentaryClick('Memory fetched')}
-                className="inline-block px-3 py-1 bg-purple-500 text-white text-xs rounded-md mr-2 font-bold border border-purple-600 shadow-sm hover:bg-purple-600 transition-colors cursor-pointer"
-              >
-                Memory fetched
-              </button>
-            );
-          case 'User memory fetched':
-            return (
-              <button
-                key={index}
-                onClick={() => handleCommentaryClick('User memory fetched')}
-                className="inline-block px-3 py-1 bg-purple-500 text-white text-xs rounded-md mr-2 font-bold border border-purple-600 shadow-sm hover:bg-purple-600 transition-colors cursor-pointer"
-              >
-                User memory fetched
-              </button>
-            );
-          case 'Tool tip':
-            return (
-              <button
-                key={index}
-                onClick={() => handleCommentaryClick('Tool tip')}
-                className="inline-block px-3 py-1 bg-yellow-500 text-white text-xs rounded-md mr-2 font-bold border border-yellow-600 shadow-sm hover:bg-yellow-600 transition-colors cursor-pointer"
-              >
-                Tool tip
-              </button>
-            );
-          case 'User intent':
-            return (
-              <button
-                key={index}
-                onClick={() => handleCommentaryClick('User intent')}
-                className="inline-block px-3 py-1 bg-indigo-500 text-white text-xs rounded-md mr-2 font-bold border border-indigo-600 shadow-sm hover:bg-indigo-600 transition-colors cursor-pointer"
-              >
-                User intent
-              </button>
-            );
-          case 'Web search, Quickbooks schema fetch, agent asks clarifying questions':
-            return (
-              <button
-                key={index}
-                onClick={() => handleCommentaryClick('Web search, Quickbooks schema fetch, agent asks clarifying questions')}
-                className="inline-block px-3 py-1 bg-teal-500 text-white text-xs rounded-md mr-2 font-bold border border-teal-600 shadow-sm hover:bg-teal-600 transition-colors cursor-pointer"
-              >
-                Web search, Quickbooks schema fetch, agent asks clarifying questions
-              </button>
-            );
-          case 'User expectation that agent learns from their previous solution':
-            return (
-              <button
-                key={index}
-                onClick={() => handleCommentaryClick('User expectation that agent learns from their previous solution')}
-                className="inline-block px-3 py-1 bg-pink-500 text-white text-xs rounded-md mr-2 font-bold border border-pink-600 shadow-sm hover:bg-pink-600 transition-colors cursor-pointer"
-              >
-                User expectation that agent learns from their previous solution
-              </button>
-            );
-          case 'Agent learns from user\'s previous solution':
-            return (
-              <button
-                key={index}
-                onClick={() => handleCommentaryClick('Agent learns from user\'s previous solution')}
-                className="inline-block px-3 py-1 bg-pink-500 text-white text-xs rounded-md mr-2 font-bold border border-pink-600 shadow-sm hover:bg-pink-600 transition-colors cursor-pointer"
-              >
-                Agent learns from user's previous solution
-              </button>
-            );
-          case 'Learn from user\'s prior solution':
-            return (
-              <button
-                key={index}
-                onClick={() => handleCommentaryClick('Learn from user\'s prior solution')}
-                className="inline-block px-3 py-1 bg-pink-500 text-white text-xs rounded-md mr-2 font-bold border border-pink-600 shadow-sm hover:bg-pink-600 transition-colors cursor-pointer"
-              >
-                Learn from user's prior solution
-              </button>
-            );
-          case 'Smart assumption':
-            return (
-              <button
-                key={index}
-                onClick={() => handleCommentaryClick('Smart assumption')}
-                className="inline-block px-3 py-1 bg-emerald-500 text-white text-xs rounded-md mr-2 font-bold border border-emerald-600 shadow-sm hover:bg-emerald-600 transition-colors cursor-pointer"
-              >
-                Smart assumption
-              </button>
-            );
-          case 'Welcome':
-            return (
-              <button
-                key={index}
-                onClick={() => handleCommentaryClick('Welcome')}
-                className="inline-block px-3 py-1 bg-emerald-500 text-white text-xs rounded-md mr-2 font-bold border border-emerald-600 shadow-sm hover:bg-emerald-600 transition-colors cursor-pointer"
-              >
-                Welcome
-              </button>
-            );
-          case 'Clarifying question':
-            return (
-              <button
-                key={index}
-                onClick={() => handleCommentaryClick('Clarifying question')}
-                className="inline-block px-3 py-1 bg-orange-500 text-white text-xs rounded-md mr-2 font-bold border border-orange-600 shadow-sm hover:bg-orange-600 transition-colors cursor-pointer"
-              >
-                Clarifying question
-              </button>
-            );
-          case 'Agent overview':
-            return (
-              <button
-                key={index}
-                onClick={() => handleCommentaryClick('Agent overview')}
-                className="inline-block px-3 py-1 bg-violet-500 text-white text-xs rounded-md mr-2 font-bold border border-violet-600 shadow-sm hover:bg-violet-600 transition-colors cursor-pointer"
-              >
-                Agent overview
-              </button>
-            );
-          case 'Spreadsheet':
-            return (
-              <button
-                key={index}
-                onClick={() => handleCommentaryClick('Spreadsheet')}
-                className="inline-block px-3 py-1 bg-gray-500 text-white text-xs rounded-md mr-2 font-bold border border-gray-600 shadow-sm hover:bg-gray-600 transition-colors cursor-pointer"
-              >
-                Spreadsheet
-              </button>
-            );
-          case 'Connect to Quickbooks':
-            return (
-              <button
-                key={index}
-                onClick={() => handleCommentaryClick('Connect to Quickbooks')}
-                className="inline-block px-3 py-1 bg-red-500 text-white text-xs rounded-md mr-2 font-bold border border-red-600 shadow-sm hover:bg-red-600 transition-colors cursor-pointer"
-              >
-                Connect to Quickbooks
-              </button>
-            );
-          case 'Web search':
-            return (
-              <button
-                key={index}
-                onClick={() => handleCommentaryClick('Web search')}
-                className="inline-block px-3 py-1 bg-cyan-500 text-white text-xs rounded-md mr-2 font-bold border border-cyan-600 shadow-sm hover:bg-cyan-600 transition-colors cursor-pointer"
-              >
-                Web search
-              </button>
-            );
-          case 'Quickbooks schema fetch':
-            return (
-              <button
-                key={index}
-                onClick={() => handleCommentaryClick('Quickbooks schema fetch')}
-                className="inline-block px-3 py-1 bg-lime-500 text-white text-xs rounded-md mr-2 font-bold border border-lime-600 shadow-sm hover:bg-lime-600 transition-colors cursor-pointer"
-              >
-                Quickbooks schema fetch
-              </button>
-            );
-          case 'clarifying question':
-            return (
-              <button
-                key={index}
-                onClick={() => handleCommentaryClick('clarifying question')}
-                className="inline-block px-3 py-1 bg-orange-500 text-white text-xs rounded-md mr-2 font-bold border border-orange-600 shadow-sm hover:bg-orange-600 transition-colors cursor-pointer"
-              >
-                clarifying question
-              </button>
-            );
-          case 'Clarifying question':
-            return (
-              <button
-                key={index}
-                onClick={() => handleCommentaryClick('Clarifying question')}
-                className="inline-block px-3 py-1 bg-orange-500 text-white text-xs rounded-md mr-2 font-bold border border-orange-600 shadow-sm hover:bg-orange-600 transition-colors cursor-pointer"
-              >
-                Clarifying question
-              </button>
-            );
-          case 'proactive question':
-            return (
-              <button
-                key={index}
-                onClick={() => handleCommentaryClick('proactive question')}
-                className="inline-block px-3 py-1 bg-orange-500 text-white text-xs rounded-md mr-2 font-bold border border-orange-600 shadow-sm hover:bg-orange-600 transition-colors cursor-pointer"
-              >
-                proactive question
-              </button>
-            );
-          case 'roactive question':
-            return (
-              <button
-                key={index}
-                onClick={() => handleCommentaryClick('roactive question')}
-                className="inline-block px-3 py-1 bg-orange-500 text-white text-xs rounded-md mr-2 font-bold border border-orange-600 shadow-sm hover:bg-orange-600 transition-colors cursor-pointer"
-              >
-                roactive question
-              </button>
-            );
-          case 'Proactive question':
-            return (
-              <button
-                key={index}
-                onClick={() => handleCommentaryClick('Proactive question')}
-                className="inline-block px-3 py-1 bg-orange-500 text-white text-xs rounded-md mr-2 font-bold border border-orange-600 shadow-sm hover:bg-orange-600 transition-colors cursor-pointer"
-              >
-                Proactive question
-              </button>
-            );
-          case 'Personalize communication':
-            return (
-              <button
-                key={index}
-                onClick={() => handleCommentaryClick('Personalize communication')}
-                className="inline-block px-3 py-1 bg-teal-500 text-white text-xs rounded-md mr-2 font-bold border border-teal-600 shadow-sm hover:bg-teal-600 transition-colors cursor-pointer"
-              >
-                Personalize communication
-              </button>
-            );
-          case 'User acceptance test':
-            return (
-              <button
-                key={index}
-                onClick={() => handleCommentaryClick('User acceptance test')}
-                className="inline-block px-3 py-1 bg-emerald-500 text-white text-xs rounded-md mr-2 font-bold border border-emerald-600 shadow-sm hover:bg-emerald-600 transition-colors cursor-pointer"
-              >
-                User acceptance test
-              </button>
-            );
-          case 'Plan approved':
-            return (
-              <button
-                key={index}
-                onClick={() => handleCommentaryClick('Plan approved')}
-                className="inline-block px-3 py-1 bg-green-500 text-white text-xs rounded-md mr-2 font-bold border border-green-600 shadow-sm hover:bg-green-600 transition-colors cursor-pointer"
-              >
-                Plan approved
-              </button>
-            );
-          case 'Integration test':
-            return (
-              <button
-                key={index}
-                onClick={() => handleCommentaryClick('Integration test')}
-                className="inline-block px-3 py-1 bg-blue-500 text-white text-xs rounded-md mr-2 font-bold border border-blue-600 shadow-sm hover:bg-blue-600 transition-colors cursor-pointer"
-              >
-                Integration test
-              </button>
-            );
-          case 'User guidance':
-            return (
-              <button
-                key={index}
-                onClick={() => handleCommentaryClick('User guidance')}
-                className="inline-block px-3 py-1 bg-amber-500 text-white text-xs rounded-md mr-2 font-bold border border-amber-600 shadow-sm hover:bg-amber-600 transition-colors cursor-pointer"
-              >
-                User guidance
-              </button>
-            );
-          case 'User Intent':
-            return (
-              <button
-                key={index}
-                onClick={() => handleCommentaryClick('User Intent')}
-                className="inline-block px-3 py-1 bg-indigo-500 text-white text-xs rounded-md mr-2 font-bold border border-indigo-600 shadow-sm hover:bg-indigo-600 transition-colors cursor-pointer"
-              >
-                User Intent
-              </button>
-            );
-          case 'Agent plan':
-            return (
-              <button
-                key={index}
-                onClick={() => handleCommentaryClick('Agent plan')}
-                className="inline-block px-3 py-1 bg-violet-500 text-white text-xs rounded-md mr-2 font-bold border border-violet-600 shadow-sm hover:bg-violet-600 transition-colors cursor-pointer"
-              >
-                Agent plan
-              </button>
-            );
-          case 'Securely connect to Quickbooks':
-            return (
-              <button
-                key={index}
-                onClick={() => handleCommentaryClick('Securely connect to Quickbooks')}
-                className="inline-block px-3 py-1 bg-red-500 text-white text-xs rounded-md mr-2 font-bold border border-red-600 shadow-sm hover:bg-red-600 transition-colors cursor-pointer"
-              >
-                Securely connect to Quickbooks
-              </button>
-            );
-          case 'Revokable secure access to Quickbooks':
-            return (
-              <button
-                key={index}
-                onClick={() => handleCommentaryClick('Revokable secure access to Quickbooks')}
-                className="inline-block px-3 py-1 bg-red-500 text-white text-xs rounded-md mr-2 font-bold border border-red-600 shadow-sm hover:bg-red-600 transition-colors cursor-pointer"
-              >
-                Revokable secure access to Quickbooks
-              </button>
-            );
-          case 'Publish Agent':
-            return (
-              <button
-                key={index}
-                className="inline-flex items-center px-3 py-1 bg-gradient-to-r from-coral-600 to-brick-600 text-white text-xs rounded-md hover:from-coral-700 hover:to-brick-700 transition-colors duration-200 mr-2"
-              >
-                <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.293l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13a1 1 0 102 0V9.414l1.293 1.293a1 1 0 001.414-1.414z" clipRule="evenodd" />
-                </svg>
-                Publish Agent
-              </button>
-            );
-          default:
-            return <span key={index}>{part}</span>;
+  const parseFlowData = (text: string) => {
+    try {
+      // Look for JSON blocks in the text
+      const jsonMatch = text.match(/\{[\s\S]*\}/);
+      if (jsonMatch) {
+        const jsonStr = jsonMatch[0];
+        const parsed = JSON.parse(jsonStr);
+        
+        // Check if it has the expected structure
+        if (parsed.intent_server && parsed.intent_server.retriver_process_node) {
+          return parsed;
         }
       }
-      return <span key={index}>{part}</span>;
+      return null;
+    } catch (error) {
+      console.log('No valid flow JSON found in response');
+      return null;
+    }
+  };
+
+  const formatResponseText = (text: string) => {
+    // Split text into paragraphs
+    const paragraphs = text.split('\n').filter(p => p.trim());
+    
+    return paragraphs.map((paragraph, index) => {
+      // Check if it's a numbered list item
+      const numberedMatch = paragraph.match(/^(\d+)\.\s+\*\*(.+?)\*\*:\s*(.+)/);
+      if (numberedMatch) {
+        const [, number, title, content] = numberedMatch;
+        return (
+          <div key={index} className="mb-4">
+            <div className="flex items-start space-x-3">
+              <div className="flex-shrink-0 w-6 h-6 bg-coral-600 text-white rounded-full flex items-center justify-center text-xs font-bold">
+                {number}
+              </div>
+              <div className="flex-1">
+                <h4 className="font-semibold text-gray-900 mb-1">{title}</h4>
+                <p className="text-gray-700">{content}</p>
+              </div>
+            </div>
+          </div>
+        );
+      }
+      
+      // Check if it's a bullet point
+      if (paragraph.startsWith('- ')) {
+        return (
+          <div key={index} className="flex items-start space-x-2 mb-2">
+            <div className="flex-shrink-0 w-2 h-2 bg-coral-500 rounded-full mt-2"></div>
+            <p className="text-gray-700">{paragraph.substring(2)}</p>
+          </div>
+        );
+      }
+      
+      // Check if it's a question
+      if (paragraph.includes('Could you please specify:')) {
+        return (
+          <div key={index} className="mb-4">
+            <p className="text-gray-700 mb-3">{paragraph}</p>
+            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+              <h5 className="font-semibold text-yellow-800 mb-2">Please provide:</h5>
+              <ul className="space-y-1 text-yellow-700">
+                {paragraph.split('Could you please specify:')[1]?.split('-').filter(item => item.trim()).map((item, i) => (
+                  <li key={i} className="flex items-start space-x-2">
+                    <span className="text-yellow-600">•</span>
+                    <span>{item.trim()}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        );
+      }
+      
+      // Regular paragraph
+      return (
+        <p key={index} className="text-gray-700 mb-3 leading-relaxed">
+          {paragraph}
+        </p>
+      );
     });
   };
+
+  const renderFlowDiagram = (flowData: any) => {
+    if (!flowData || !flowData.intent_server) return null;
+
+    const { retriver_process_node, actors } = flowData.intent_server;
+    
+    return (
+      <div className="space-y-6">
+        {/* Retrievers Section */}
+        {retriver_process_node.retrievers && (
+          <div>
+            <h4 className="text-sm font-semibold text-gray-900 mb-3">Data Retrievers</h4>
+            <div className="space-y-3">
+              {retriver_process_node.retrievers.map((retriever: any, index: number) => (
+                <div key={index} className="bg-green-50 border border-green-200 rounded-lg p-3">
+                  <div className="flex items-center space-x-2 mb-2">
+                    <div className="w-4 h-4 bg-green-500 rounded-full flex items-center justify-center">
+                      <svg className="w-2 h-2 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    </div>
+                    <h5 className="font-medium text-green-800">{retriever.name}</h5>
+                  </div>
+                  <p className="text-sm text-green-700">{retriever.description}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Process Nodes Section */}
+        {retriver_process_node.process_nodes && (
+          <div>
+            <h4 className="text-sm font-semibold text-gray-900 mb-3">Processing Steps</h4>
+            <div className="space-y-3">
+              {retriver_process_node.process_nodes.map((node: any, index: number) => (
+                <div key={index} className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+                  <div className="flex items-center space-x-2 mb-2">
+                    <div className="w-4 h-4 bg-blue-500 rounded-full flex items-center justify-center">
+                      <svg className="w-2 h-2 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zm0 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V8zm0 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1v-2z" clipRule="evenodd" />
+                      </svg>
+                    </div>
+                    <h5 className="font-medium text-blue-800">{node.name}</h5>
+                  </div>
+                  <p className="text-sm text-blue-700">{node.description}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Actors Section */}
+        {actors && (
+          <div>
+            <h4 className="text-sm font-semibold text-gray-900 mb-3">Actions</h4>
+            <div className="space-y-3">
+              {actors.map((actor: any, index: number) => (
+                <div key={index} className="bg-purple-50 border border-purple-200 rounded-lg p-3">
+                  <div className="flex items-center space-x-2 mb-2">
+                    <div className="w-4 h-4 bg-purple-500 rounded-full flex items-center justify-center">
+                      <svg className="w-2 h-2 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+                        <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+                      </svg>
+                    </div>
+                    <h5 className="font-medium text-purple-800">{actor.name}</h5>
+                  </div>
+                  <p className="text-sm text-purple-700 mb-2">{actor.description}</p>
+                  {actor.slots && (
+                    <div className="text-xs text-purple-600">
+                      <span className="font-medium">Slots:</span> {Object.keys(actor.slots).join(', ')}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  };
+
+
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
@@ -500,7 +327,7 @@ const Create: React.FC = () => {
                   <ChatBubbleLeftRightIcon className="w-3 h-3 text-white" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-900 text-sm">Agent Builder Chat</h3>
+                  <h3 className="font-semibold text-gray-900 text-sm">Agent Builder</h3>
                 </div>
               </div>
             </div>
@@ -520,7 +347,21 @@ const Create: React.FC = () => {
                       : 'bg-gray-100 text-gray-900'
                   }`}>
                     <div className="text-sm">
-                      {renderMessageWithWidgets(message.text)}
+                      {message.sender === 'ai' ? (
+                        <div className="prose prose-sm max-w-none">
+                          {formatResponseText(message.text)}
+                        </div>
+                      ) : (
+                        message.text
+                      )}
+                      {message.metadata && message.sender === 'ai' && (
+                        <div className="mt-2 p-2 bg-blue-50 rounded border border-blue-200 text-xs">
+                          <div className="font-semibold text-blue-800 mb-1">Response Details:</div>
+                          <pre className="text-blue-700 whitespace-pre-wrap overflow-x-auto">
+                            {JSON.stringify(message.metadata, null, 2)}
+                          </pre>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </motion.div>
@@ -553,7 +394,7 @@ const Create: React.FC = () => {
                   value={inputMessage}
                   onChange={(e) => setInputMessage(e.target.value)}
                   onKeyPress={handleKeyPress}
-                  placeholder="Describe your agent idea..."
+                  placeholder="Describe your agent idea and I'll help you build it..."
                   className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-coral-500 focus:border-transparent"
                 />
                 <button
@@ -595,101 +436,114 @@ const Create: React.FC = () => {
               </div>
             </div>
 
-            {/* Builder Content */}
+                        {/* Builder Content */}
             {showGeneratedAgent && (
-              <div className="flex-1 p-6">
-                <div className="mb-6">
+              <div className="flex-1 p-6 overflow-y-auto">
+                {/* Check if we have flow data from any AI message */}
+                {(() => {
+                  const flowData = messages
+                    .filter(msg => msg.sender === 'ai' && msg.flowData)
+                    .pop()?.flowData;
                   
-                  {/* Flowchart */}
-                  <div className="space-y-4">
-                    {/* Trigger */}
-                    <div className="flex items-center justify-center">
-                      <div className="flex items-center space-x-2">
-                        <img src="/logo.png" alt="Coral Bricks AI" className="w-5 h-5" />
-                        <div className="bg-emerald-500 text-white px-4 py-2 rounded-lg font-medium text-sm">
-                          Timer Trigger
+                  if (flowData) {
+                    return renderFlowDiagram(flowData);
+                  }
+                  
+                  // Fallback to default flowchart
+                  return (
+                    <div className="mb-6">
+                      <h4 className="text-sm font-semibold text-gray-900 mb-4">Default Agent Flow</h4>
+                      <div className="space-y-4">
+                        {/* Trigger */}
+                        <div className="flex items-center justify-center">
+                          <div className="flex items-center space-x-2">
+                            <img src="/logo.png" alt="Coral Bricks AI" className="w-5 h-5" />
+                            <div className="bg-emerald-500 text-white px-4 py-2 rounded-lg font-medium text-sm">
+                              Timer Trigger
+                            </div>
+                          </div>
+                        </div>
+                        
+                        {/* Arrow */}
+                        <div className="flex justify-center">
+                          <svg className="w-4 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M10 3a1 1 0 011 1v10.586l3.293-3.293a1 1 0 111.414 1.414l-5 5a1 1 0 01-1.414 0l-5-5a1 1 0 111.414-1.414L9 14.586V4a1 1 0 011-1z" clipRule="evenodd" />
+                          </svg>
+                        </div>
+                        
+                        {/* Get Data Step */}
+                        <div className="flex items-center justify-center space-x-4">
+                          <div className="flex items-center space-x-2">
+                            <img src="/qbo_logo.jpg" alt="QuickBooks" className="w-5 h-5" />
+                            <div className="bg-green-500 text-white px-3 py-2 rounded-lg font-medium text-xs">
+                              Get Purchase Price
+                            </div>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <img src="/qbo_logo.jpg" alt="QuickBooks" className="w-5 h-5" />
+                            <div className="bg-green-500 text-white px-3 py-2 rounded-lg font-medium text-xs">
+                              Get Selling Price
+                            </div>
+                          </div>
+                        </div>
+                        
+                        {/* Arrow */}
+                        <div className="flex justify-center">
+                          <svg className="w-4 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M10 3a1 1 0 011 1v10.586l3.293-3.293a1 1 0 111.414 1.414l-5 5a1 1 0 01-1.414 0l-5-5a1 1 0 111.414-1.414L9 14.586V4a1 1 0 011-1z" clipRule="evenodd" />
+                          </svg>
+                        </div>
+                        
+                        {/* Compute Step */}
+                        <div className="flex items-center justify-center">
+                          <div className="flex items-center space-x-2">
+                            <img src="/logo.png" alt="Coral Bricks AI" className="w-5 h-5" />
+                            <div className="bg-blue-500 text-white px-4 py-2 rounded-lg font-medium text-sm">
+                              Compute Markup
+                            </div>
+                          </div>
+                        </div>
+                        
+                        {/* Arrow */}
+                        <div className="flex justify-center">
+                          <svg className="w-4 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M10 3a1 1 0 011 1v10.586l3.293-3.293a1 1 0 111.414 1.414l-5 5a1 1 0 01-1.414 0l-5-5a1 1 0 111.414-1.414L9 14.586V4a1 1 0 011-1z" clipRule="evenodd" />
+                          </svg>
+                        </div>
+                        
+                        {/* Generate Step */}
+                        <div className="flex items-center justify-center">
+                          <div className="flex items-center space-x-2">
+                            <img src="/logo.png" alt="Coral Bricks AI" className="w-5 h-5" />
+                            <div className="bg-gray-500 text-white px-2 py-1 rounded text-xs font-medium">
+                              BYOM
+                            </div>
+                            <div className="bg-purple-500 text-white px-4 py-2 rounded-lg font-medium text-sm">
+                              Generate Email
+                            </div>
+                          </div>
+                        </div>
+                        
+                        {/* Arrow */}
+                        <div className="flex justify-center">
+                          <svg className="w-4 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M10 3a1 1 0 011 1v10.586l3.293-3.293a1 1 0 111.414 1.414l-5 5a1 1 0 01-1.414 0l-5-5a1 1 0 111.414-1.414L9 14.586V4a1 1 0 011-1z" clipRule="evenodd" />
+                          </svg>
+                        </div>
+                        
+                        {/* Send Step */}
+                        <div className="flex items-center justify-center">
+                          <div className="flex items-center space-x-2">
+                            <img src="/mailgun_logo.png" alt="Mailgun" className="w-5 h-5" />
+                            <div className="bg-red-500 text-white px-4 py-2 rounded-lg font-medium text-sm">
+                              Send Email
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
-                    
-                    {/* Arrow */}
-                    <div className="flex justify-center">
-                      <svg className="w-4 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M10 3a1 1 0 011 1v10.586l3.293-3.293a1 1 0 111.414 1.414l-5 5a1 1 0 01-1.414 0l-5-5a1 1 0 111.414-1.414L9 14.586V4a1 1 0 011-1z" clipRule="evenodd" />
-                      </svg>
-                    </div>
-                    
-                    {/* Get Data Step */}
-                    <div className="flex items-center justify-center space-x-4">
-                      <div className="flex items-center space-x-2">
-                        <img src="/qbo_logo.jpg" alt="QuickBooks" className="w-5 h-5" />
-                        <div className="bg-green-500 text-white px-3 py-2 rounded-lg font-medium text-xs">
-                          Get Purchase Price
-                        </div>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <img src="/qbo_logo.jpg" alt="QuickBooks" className="w-5 h-5" />
-                        <div className="bg-green-500 text-white px-3 py-2 rounded-lg font-medium text-xs">
-                          Get Selling Price
-                        </div>
-                      </div>
-                    </div>
-                    
-                    {/* Arrow */}
-                    <div className="flex justify-center">
-                      <svg className="w-4 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M10 3a1 1 0 011 1v10.586l3.293-3.293a1 1 0 111.414 1.414l-5 5a1 1 0 01-1.414 0l-5-5a1 1 0 111.414-1.414L9 14.586V4a1 1 0 011-1z" clipRule="evenodd" />
-                      </svg>
-                    </div>
-                    
-                    {/* Compute Step */}
-                    <div className="flex items-center justify-center">
-                      <div className="flex items-center space-x-2">
-                        <img src="/logo.png" alt="Coral Bricks AI" className="w-5 h-5" />
-                        <div className="bg-blue-500 text-white px-4 py-2 rounded-lg font-medium text-sm">
-                          Compute Markup
-                        </div>
-                      </div>
-                    </div>
-                    
-                    {/* Arrow */}
-                    <div className="flex justify-center">
-                      <svg className="w-4 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M10 3a1 1 0 011 1v10.586l3.293-3.293a1 1 0 111.414 1.414l-5 5a1 1 0 01-1.414 0l-5-5a1 1 0 111.414-1.414L9 14.586V4a1 1 0 011-1z" clipRule="evenodd" />
-                      </svg>
-                    </div>
-                    
-                                      {/* Generate Step */}
-                  <div className="flex items-center justify-center">
-                    <div className="flex items-center space-x-2">
-                      <img src="/logo.png" alt="Coral Bricks AI" className="w-5 h-5" />
-                      <div className="bg-gray-500 text-white px-2 py-1 rounded text-xs font-medium">
-                        BYOM
-                      </div>
-                      <div className="bg-purple-500 text-white px-4 py-2 rounded-lg font-medium text-sm">
-                        Generate Email
-                      </div>
-                    </div>
-                  </div>
-                    
-                    {/* Arrow */}
-                    <div className="flex justify-center">
-                      <svg className="w-4 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M10 3a1 1 0 011 1v10.586l3.293-3.293a1 1 0 111.414 1.414l-5 5a1 1 0 01-1.414 0l-5-5a1 1 0 111.414-1.414L9 14.586V4a1 1 0 011-1z" clipRule="evenodd" />
-                      </svg>
-                    </div>
-                    
-                    {/* Send Step */}
-                    <div className="flex items-center justify-center">
-                      <div className="flex items-center space-x-2">
-                        <img src="/mailgun_logo.png" alt="Mailgun" className="w-5 h-5" />
-                        <div className="bg-red-500 text-white px-4 py-2 rounded-lg font-medium text-sm">
-                          Send Email
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                  );
+                })()}
               </div>
             )}
           </div>
