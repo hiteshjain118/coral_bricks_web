@@ -15,7 +15,6 @@ const Navbar: React.FC = () => {
   ];
 
   const isActive = (path: string) => location.pathname === path;
-  const isAuthenticatedPage = location.pathname === '/demo';
   const isCreatePage = location.pathname === '/demo';
 
   return (
@@ -34,8 +33,7 @@ const Navbar: React.FC = () => {
             </span>
           </Link>
 
-          {/* Desktop Navigation - Only on non-authenticated pages */}
-          {!isAuthenticatedPage && (
+          {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
             {navigation.map((item) => (
               <Link
@@ -51,22 +49,8 @@ const Navbar: React.FC = () => {
               </Link>
             ))}
           </div>
-          )}
 
-          {/* User Profile - Only on authenticated pages */}
-          {isAuthenticatedPage && (
-            <div className="hidden md:flex items-center space-x-3">
-              <div className="flex items-center space-x-2">
-                <div className="w-8 h-8 bg-gradient-to-r from-coral-500 to-brick-600 rounded-full flex items-center justify-center">
-                  <span className="text-white text-sm font-medium">HJ</span>
-                </div>
-                <div className="text-sm">
-                  <p className="font-medium text-gray-900">Hitesh Jain</p>
-                  <p className="text-gray-500">Logged in</p>
-                </div>
-              </div>
-            </div>
-          )}
+
 
           {/* Authentication UI */}
           <div className="hidden md:flex items-center space-x-4">

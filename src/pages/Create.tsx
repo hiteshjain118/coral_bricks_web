@@ -359,14 +359,7 @@ const Create: React.FC = () => {
                       ) : (
                         message.text
                       )}
-                      {message.metadata && message.sender === 'ai' && (
-                        <div className="mt-2 p-2 bg-blue-50 rounded border border-blue-200 text-xs">
-                          <div className="font-semibold text-blue-800 mb-1">Response Details:</div>
-                          <pre className="text-blue-700 whitespace-pre-wrap overflow-x-auto">
-                            {JSON.stringify(message.metadata, null, 2)}
-                          </pre>
-                        </div>
-                      )}
+
                     </div>
                   </div>
                 </motion.div>

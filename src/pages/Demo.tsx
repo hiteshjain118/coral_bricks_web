@@ -48,7 +48,7 @@ const Demo: React.FC = () => {
         setMessages([
           {
             id: '1',
-            text: "Hi! I'm your AI agent builder. Tell me what kind of agent you'd like to create and I'll help you build it step by step.",
+            text: "Welcome to the Agent Builder Demo! This is a demonstration of our AI agent creation system. Try typing a message to see how it works.",
             sender: 'ai',
             timestamp: new Date()
           }
