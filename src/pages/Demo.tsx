@@ -11,6 +11,17 @@ interface Message {
   text: string;
   sender: 'user' | 'ai';
   timestamp: Date;
+  attachments?: Attachment[]; // For tables, code, and other attachments
+}
+
+interface Attachment {
+  type: 'table' | 'code';
+  content?: any; // JSON for tables, string for code (optional for table type)
+  language?: string; // For code attachments (e.g., 'python', 'javascript')
+  title?: string; // Optional title for the attachment
+  // For table type with columns/rows format
+  columns?: string[];
+  rows?: any[][];
 }
 
 interface MockMessage {
@@ -30,13 +41,24 @@ const Demo: React.FC = () => {
         const response = await fetch('/mock_convo.json');
         const mockData: MockMessage[] = await response.json();
         
-        const convertedMessages: Message[] = mockData.map((msg, index) => ({
-          id: (index + 1).toString(),
-          text: msg.content,
-          sender: msg.role === 'user' ? 'user' : 'ai',
-          timestamp: new Date(Date.now() - (mockData.length - index) * 60000) // Stagger timestamps
-        }));
+        const convertedMessages: Message[] = mockData.map((msg, index) => {
+          const message: Message = {
+            id: (index + 1).toString(),
+            text: msg.content,
+            sender: msg.role === 'user' ? 'user' : 'ai',
+            timestamp: new Date(Date.now() - (mockData.length - index) * 60000), // Stagger timestamps
+            attachments: (msg as any).attachments || undefined // Handle attachments from mock conversation
+          };
+          
+          // Debug logging for attachments
+          if (message.attachments) {
+            console.log(`Message ${index + 1} has attachments:`, message.attachments);
+          }
+          
+          return message;
+        });
         
+        console.log('Converted messages:', convertedMessages);
         setMessages(convertedMessages);
         // Delay setting the ref to prevent auto-scroll on initial load
         setTimeout(() => {
@@ -111,6 +133,117 @@ const Demo: React.FC = () => {
     console.log('Commentary clicked:', commentary);
     // You can add specific actions for each commentary type here
     // For example, show tooltips, expand details, or trigger specific behaviors
+  };
+
+  const renderAttachment = (attachment: Attachment) => {
+    switch (attachment.type) {
+      case 'table':
+        try {
+          let data = typeof attachment.content === 'string' ? JSON.parse(attachment.content) : attachment.content;
+          
+          // Handle columns/rows format from mock conversation
+          if (attachment.columns && attachment.rows) {
+            const { columns, rows } = attachment;
+            return (
+              <div className="mt-3 p-4 bg-gray-50 rounded-lg border border-gray-200">
+                {attachment.title && (
+                  <h4 className="text-sm font-semibold text-gray-700 mb-3">{attachment.title}</h4>
+                )}
+                <div className="overflow-x-auto">
+                  <table className="min-w-full text-sm">
+                    <thead>
+                      <tr className="border-b border-gray-300">
+                        {columns.map((header: string, index: number) => (
+                          <th key={index} className="px-3 py-2 text-left font-medium text-gray-700 bg-gray-100">
+                            {header}
+                          </th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {rows.map((row: any[], rowIndex: number) => (
+                        <tr key={rowIndex} className="border-b border-gray-200 hover:bg-gray-50">
+                          {row.map((cell: any, colIndex: number) => (
+                            <td key={colIndex} className="px-3 py-2 text-gray-600">
+                              {String(cell)}
+                            </td>
+                          ))}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            );
+          }
+          
+          // Handle standard array of objects format
+          if (Array.isArray(data) && data.length > 0) {
+            const headers = Object.keys(data[0]);
+            return (
+              <div className="mt-3 p-4 bg-gray-50 rounded-lg border border-gray-200">
+                {attachment.title && (
+                  <h4 className="text-sm font-semibold text-gray-700 mb-3">{attachment.title}</h4>
+                )}
+                <div className="overflow-x-auto">
+                  <table className="min-w-full text-sm">
+                    <thead>
+                      <tr className="border-b border-gray-300">
+                        {headers.map((header, index) => (
+                          <th key={index} className="px-3 py-2 text-left font-medium text-gray-700 bg-gray-100">
+                            {header}
+                          </th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {data.map((row, rowIndex) => (
+                        <tr key={rowIndex} className="border-b border-gray-200 hover:bg-gray-50">
+                          {headers.map((header, colIndex) => (
+                            <td key={colIndex} className="px-3 py-2 text-gray-600">
+                              {typeof row[header] === 'object' ? JSON.stringify(row[header]) : String(row[header])}
+                            </td>
+                          ))}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            );
+          }
+        } catch (error) {
+          console.error('Error parsing table data:', error);
+        }
+        return null;
+
+      case 'code':
+        return (
+          <div className="mt-3 p-4 bg-gray-900 rounded-lg border border-gray-700">
+            {attachment.title && (
+              <h4 className="text-sm font-semibold text-gray-300 mb-2">{attachment.title}</h4>
+            )}
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-xs text-gray-400 uppercase tracking-wide">
+                {attachment.language || 'code'}
+              </span>
+              <button
+                onClick={() => navigator.clipboard.writeText(attachment.content)}
+                className="text-xs text-gray-400 hover:text-white transition-colors duration-200"
+                title="Copy to clipboard"
+              >
+                Copy
+              </button>
+            </div>
+            <pre className="text-sm text-gray-100 overflow-x-auto">
+              <code>{attachment.content}</code>
+            </pre>
+          </div>
+        );
+
+      default:
+        return null;
+    }
   };
 
   const renderMessageWithWidgets = (text: string) => {
@@ -294,16 +427,7 @@ const Demo: React.FC = () => {
                 Spreadsheet
               </button>
             );
-          case 'Connect to Quickbooks':
-            return (
-              <button
-                key={index}
-                onClick={() => handleCommentaryClick('Connect to Quickbooks')}
-                className="inline-block px-3 py-1 bg-red-500 text-white text-xs rounded-md mr-2 font-bold border border-red-600 shadow-sm hover:bg-red-600 transition-colors cursor-pointer"
-              >
-                Connect to Quickbooks
-              </button>
-            );
+
           case 'Web search':
             return (
               <button
@@ -342,6 +466,16 @@ const Demo: React.FC = () => {
                 className="inline-block px-3 py-1 bg-orange-500 text-white text-xs rounded-md mr-2 font-bold border border-orange-600 shadow-sm hover:bg-orange-600 transition-colors cursor-pointer"
               >
                 proactive question
+              </button>
+            );
+          case 'Proactive question':
+            return (
+              <button
+                key={index}
+                onClick={() => handleCommentaryClick('Proactive question')}
+                className="inline-block px-3 py-1 bg-orange-500 text-white text-xs rounded-md mr-2 font-bold border border-orange-600 shadow-sm hover:bg-orange-600 transition-colors cursor-pointer"
+              >
+                Proactive question
               </button>
             );
           case 'roactive question':
@@ -414,6 +548,17 @@ const Demo: React.FC = () => {
                 User Intent
               </button>
             );
+          
+          case 'Revokable secure access to Quickbooks':
+            return (
+              <button
+                key={index}
+                onClick={() => handleCommentaryClick('Revokable secure access to Quickbooks')}
+                className="inline-block px-3 py-1 bg-red-500 text-white text-xs rounded-md mr-2 font-bold border border-red-600 shadow-sm hover:bg-red-600 transition-colors cursor-pointer"
+              >
+                Revokable secure access to Quickbooks
+              </button>
+            );
           case 'Agent plan':
             return (
               <button
@@ -432,16 +577,6 @@ const Demo: React.FC = () => {
                 className="inline-block px-3 py-1 bg-red-500 text-white text-xs rounded-md mr-2 font-bold border border-red-600 shadow-sm hover:bg-red-600 transition-colors cursor-pointer"
               >
                 Securely connect to Quickbooks
-              </button>
-            );
-          case 'Revokable secure access to Quickbooks':
-            return (
-              <button
-                key={index}
-                onClick={() => handleCommentaryClick('Revokable secure access to Quickbooks')}
-                className="inline-block px-3 py-1 bg-red-500 text-white text-xs rounded-md mr-2 font-bold border border-red-600 shadow-sm hover:bg-red-600 transition-colors cursor-pointer"
-              >
-                Revokable secure access to Quickbooks
               </button>
             );
           case 'Publish Agent':
@@ -500,6 +635,16 @@ const Demo: React.FC = () => {
                   }`}>
                     <div className="text-sm">
                       {renderMessageWithWidgets(message.text)}
+                      {/* Render attachments if they exist */}
+                      {message.attachments && message.attachments.length > 0 && (
+                        <div className="mt-3 space-y-3">
+                          {message.attachments.map((attachment, index) => (
+                            <div key={index}>
+                              {renderAttachment(attachment)}
+                            </div>
+                          ))}
+                        </div>
+                      )}
                     </div>
                   </div>
                 </motion.div>

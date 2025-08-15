@@ -61,7 +61,25 @@
   },
   {
     "role": "agent",
-    "content": "Understood. I'm now able to generate the markups per product. Moving on to the next step, which is to send you the report. When do you need the daily email?[Proactive question]"
+    "content": "Understood. I'm now able to generate the markups per product. Attached example report. Can you check? [User acceptance test]",
+    "attachments": [
+      {
+        "type": "table",
+        "columns": ["ProductName", "Markup"],
+        "rows": [
+          ["Chicken", "10%"],
+          ["Beef", "15%"]
+        ]
+      }
+    ]
+  },
+  {
+    "role": "user",
+    "content": "Yes, that's perfect!"
+  },
+  {
+    "role": "agent",
+    "content": "Moving on to the next step, which is to send you the report. When do you need the daily email?[Proactive question]"
   },
   {
     "role": "user",

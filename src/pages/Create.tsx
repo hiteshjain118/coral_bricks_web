@@ -14,6 +14,14 @@ interface Message {
   timestamp: Date;
   metadata?: any; // For additional response data
   flowData?: any; // For flow diagram data
+  attachments?: Attachment[]; // For tables, code, and other attachments
+}
+
+interface Attachment {
+  type: 'table' | 'code';
+  content: any; // JSON for tables, string for code
+  language?: string; // For code attachments (e.g., 'python', 'javascript')
+  title?: string; // Optional title for the attachment
 }
 
 const Create: React.FC = () => {
@@ -117,13 +125,17 @@ const Create: React.FC = () => {
       // Check for flow data in the response
       const flowData = parseFlowData(responseText);
       
+      // Parse attachments from the response
+      const attachments = parseAttachments(data);
+      
       const aiMessage: Message = {
         id: (Date.now() + 1).toString(),
         text: responseText,
         sender: 'ai',
         timestamp: new Date(),
         metadata: data, // Store full response data
-        flowData: flowData // Store flow diagram data
+        flowData: flowData, // Store flow diagram data
+        attachments: attachments // Store parsed attachments
       };
       
       setMessages(prev => [...prev, aiMessage]);
@@ -168,6 +180,80 @@ const Create: React.FC = () => {
       console.log('No valid flow JSON found in response');
       return null;
     }
+  };
+
+  const parseAttachments = (data: any): Attachment[] => {
+    const attachments: Attachment[] = [];
+    
+    try {
+      // Check if the response has attachments
+      if (data.attachments && Array.isArray(data.attachments)) {
+        data.attachments.forEach((attachment: any) => {
+          if (attachment.type && attachment.content) {
+            attachments.push({
+              type: attachment.type,
+              content: attachment.content,
+              language: attachment.language,
+              title: attachment.title
+            });
+          }
+        });
+      }
+      
+      // Check if there's a table in the response
+      if (data.table && Array.isArray(data.table)) {
+        attachments.push({
+          type: 'table',
+          content: data.table,
+          title: data.table_title || 'Data Table'
+        });
+      }
+      
+      // Check if there's code in the response
+      if (data.code) {
+        attachments.push({
+          type: 'code',
+          content: data.code,
+          language: data.language || 'text',
+          title: data.code_title || 'Code'
+        });
+      }
+      
+      // Look for JSON tables in the text response
+      if (data.response_content) {
+        const jsonMatch = data.response_content.match(/```json\s*(\{[\s\S]*?\})\s*```/);
+        if (jsonMatch) {
+          try {
+            const parsed = JSON.parse(jsonMatch[1]);
+            if (Array.isArray(parsed) && parsed.length > 0) {
+              attachments.push({
+                type: 'table',
+                content: parsed,
+                title: 'Data from Response'
+              });
+            }
+          } catch (error) {
+            console.log('Could not parse JSON table from response');
+          }
+        }
+        
+        // Look for code blocks
+        const codeMatch = data.response_content.match(/```(\w+)?\s*([\s\S]*?)```/);
+        if (codeMatch && !codeMatch[1]?.includes('json')) {
+          attachments.push({
+            type: 'code',
+            content: codeMatch[2],
+            language: codeMatch[1] || 'text',
+            title: 'Code from Response'
+          });
+        }
+      }
+      
+    } catch (error) {
+      console.log('Error parsing attachments:', error);
+    }
+    
+    return attachments;
   };
 
   const formatResponseText = (text: string) => {
@@ -231,6 +317,79 @@ const Create: React.FC = () => {
         </p>
       );
     });
+  };
+
+  const renderAttachment = (attachment: Attachment) => {
+    switch (attachment.type) {
+      case 'table':
+        try {
+          const data = typeof attachment.content === 'string' ? JSON.parse(attachment.content) : attachment.content;
+          if (Array.isArray(data) && data.length > 0) {
+            const headers = Object.keys(data[0]);
+            return (
+              <div className="mt-3 p-4 bg-gray-50 rounded-lg border border-gray-200">
+                {attachment.title && (
+                  <h4 className="text-sm font-semibold text-gray-700 mb-3">{attachment.title}</h4>
+                )}
+                <div className="overflow-x-auto">
+                  <table className="min-w-full text-sm">
+                    <thead>
+                      <tr className="border-b border-gray-300">
+                        {headers.map((header, index) => (
+                          <th key={index} className="px-3 py-2 text-left font-medium text-gray-700 bg-gray-100">
+                            {header}
+                          </th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {data.map((row, rowIndex) => (
+                        <tr key={rowIndex} className="border-b border-gray-200 hover:bg-gray-50">
+                          {headers.map((header, colIndex) => (
+                            <td key={colIndex} className="px-3 py-2 text-gray-600">
+                              {typeof row[header] === 'object' ? JSON.stringify(row[header]) : String(row[header])}
+                            </td>
+                          ))}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            );
+          }
+        } catch (error) {
+          console.error('Error parsing table data:', error);
+        }
+        return null;
+
+      case 'code':
+        return (
+          <div className="mt-3 p-4 bg-gray-900 rounded-lg border border-gray-700">
+            {attachment.title && (
+              <h4 className="text-sm font-semibold text-gray-300 mb-2">{attachment.title}</h4>
+            )}
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-xs text-gray-400 uppercase tracking-wide">
+                {attachment.language || 'code'}
+              </span>
+              <button
+                onClick={() => navigator.clipboard.writeText(attachment.content)}
+                className="text-xs text-gray-400 hover:text-white transition-colors duration-200"
+                title="Copy to clipboard"
+              >
+                Copy
+              </button>
+            </div>
+            <pre className="text-sm text-gray-100 overflow-x-auto">
+              <code>{attachment.content}</code>
+            </pre>
+          </div>
+        );
+
+      default:
+        return null;
+    }
   };
 
   const renderFlowDiagram = (flowData: any) => {
@@ -355,6 +514,16 @@ const Create: React.FC = () => {
                       {message.sender === 'ai' ? (
                         <div className="prose prose-sm max-w-none">
                           {formatResponseText(message.text)}
+                          {/* Render attachments if they exist */}
+                          {message.attachments && message.attachments.length > 0 && (
+                            <div className="mt-3 space-y-3">
+                              {message.attachments.map((attachment, index) => (
+                                <div key={index}>
+                                  {renderAttachment(attachment)}
+                                </div>
+                              ))}
+                            </div>
+                          )}
                         </div>
                       ) : (
                         message.text
