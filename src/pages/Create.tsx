@@ -22,6 +22,9 @@ interface Attachment {
   content: any; // JSON for tables, string for code
   language?: string; // For code attachments (e.g., 'python', 'javascript')
   title?: string; // Optional title for the attachment
+  // For table type with columns/rows format
+  columns?: string[];
+  rows?: any[][];
 }
 
 const Create: React.FC = () => {
@@ -189,7 +192,22 @@ const Create: React.FC = () => {
       // Check if the response has attachments
       if (data.attachments && Array.isArray(data.attachments)) {
         data.attachments.forEach((attachment: any) => {
-          if (attachment.type && attachment.content) {
+          if (attachment.type === 'table' && attachment.columns && attachment.rows) {
+            // Handle the new format with columns and rows directly
+            attachments.push({
+              type: 'table',
+              content: attachment, // Pass the entire attachment object
+              title: attachment.title || 'Data Table'
+            });
+          } else if (attachment.type === 'code') {
+            attachments.push({
+              type: 'code',
+              content: attachment.content || attachment.code,
+              language: attachment.language || 'text',
+              title: attachment.title || 'Code'
+            });
+          } else if (attachment.type && attachment.content) {
+            // Handle legacy format
             attachments.push({
               type: attachment.type,
               content: attachment.content,
@@ -323,6 +341,43 @@ const Create: React.FC = () => {
     switch (attachment.type) {
       case 'table':
         try {
+          // Handle the new columns/rows format
+          if (attachment.content && attachment.content.columns && attachment.content.rows) {
+            const { columns, rows } = attachment.content;
+            return (
+              <div className="mt-3 p-4 bg-gray-50 rounded-lg border border-gray-200">
+                {attachment.title && (
+                  <h4 className="text-sm font-semibold text-gray-700 mb-3">{attachment.title}</h4>
+                )}
+                <div className="overflow-x-auto">
+                  <table className="min-w-full text-sm">
+                    <thead>
+                      <tr className="border-b border-gray-300">
+                        {columns.map((header: string, index: number) => (
+                          <th key={index} className="px-3 py-2 text-left font-medium text-gray-700 bg-gray-100">
+                            {header}
+                          </th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {rows.map((row: any[], rowIndex: number) => (
+                        <tr key={rowIndex} className="border-b border-gray-200 hover:bg-gray-50">
+                          {row.map((cell: any, colIndex: number) => (
+                            <td key={colIndex} className="px-3 py-2 text-gray-600">
+                              {String(cell)}
+                            </td>
+                          ))}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            );
+          }
+          
+          // Handle legacy array format
           const data = typeof attachment.content === 'string' ? JSON.parse(attachment.content) : attachment.content;
           if (Array.isArray(data) && data.length > 0) {
             const headers = Object.keys(data[0]);

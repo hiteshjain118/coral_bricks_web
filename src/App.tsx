@@ -11,6 +11,7 @@ import TermsOfService from './pages/TermsOfService';
 import Agents from './pages/Agents';
 import Create from './pages/Create';
 import Demo from './pages/Demo';
+import Demo1 from './pages/Demo1';
 import BookMeeting from './pages/BookMeeting';
 import Login from './pages/Login';
 
@@ -28,6 +29,7 @@ function App() {
               <Route path="/contact" element={<Contact />} />
               <Route path="/agents" element={<Agents />} />
               <Route path="/demo" element={<Demo />} />
+              <Route path="/demo1" element={<Demo1 />} />
               <Route path="/create" element={<ProtectedRoute><Create /></ProtectedRoute>} />
               <Route path="/book_meeting/hitesh" element={<BookMeeting />} />
               <Route path="/privacy-policy" element={<PrivacyPolicy />} />

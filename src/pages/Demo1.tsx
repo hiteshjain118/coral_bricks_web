@@ -29,7 +29,7 @@ interface MockMessage {
   content: string;
 }
 
-const Demo: React.FC = () => {
+const Demo1: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [showGeneratedAgent, setShowGeneratedAgent] = useState(false);
   const hasInitialMessagesLoaded = React.useRef(false);
@@ -39,8 +39,8 @@ const Demo: React.FC = () => {
     const loadMockConversation = () => {
       try {
         // Import the TypeScript mock conversation
-        import('../data/mock_convo').then(module => {
-          const mockData: MockMessage[] = module.mockConvo;
+        import('../data/mock_convo1').then(module => {
+          const mockData: MockMessage[] = module.mockConvo1;
           
           const convertedMessages: Message[] = mockData.map((msg, index) => {
             const message: Message = {
@@ -616,7 +616,7 @@ const Demo: React.FC = () => {
                   <ChatBubbleLeftRightIcon className="w-3 h-3 text-white" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-900 text-sm">Agent Builder Demo</h3>
+                  <h3 className="font-semibold text-gray-900 text-sm">Agent Builder Demo 1</h3>
                 </div>
               </div>
             </div>
@@ -825,4 +825,4 @@ const Demo: React.FC = () => {
   );
 };
 
-export default Demo; 
+export default Demo1; 
