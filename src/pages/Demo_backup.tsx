@@ -2,10 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { 
   PaperAirplaneIcon,
-  ChatBubbleLeftRightIcon,
-  UserGroupIcon,
-  ChartBarIcon,
-  XMarkIcon
+  SparklesIcon,
+  ChatBubbleLeftRightIcon
 } from '@heroicons/react/24/outline';
 
 interface Message {
@@ -14,9 +12,6 @@ interface Message {
   sender: 'user' | 'ai';
   timestamp: Date;
   attachments?: Attachment[]; // For tables, code, and other attachments
-  actions?: string[];
-  attachment?: any[];
-  code?: string;
 }
 
 interface Attachment {
@@ -32,18 +27,11 @@ interface Attachment {
 interface MockMessage {
   role: 'user' | 'agent';
   content: string;
-  attachments?: any[];
-  actions?: string[];
-  attachment?: any[];
-  code?: string;
 }
 
 const Demo: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
-  const [activeThread, setActiveThread] = useState<'customers' | 'leads'>('customers');
-  const [showModal, setShowModal] = useState(false);
-  const [modalType, setModalType] = useState<'visualize' | 'inspect' | null>(null);
-  const [modalData, setModalData] = useState<any>(null);
+  const [showGeneratedAgent, setShowGeneratedAgent] = useState(false);
   const hasInitialMessagesLoaded = React.useRef(false);
 
   // Load mock conversation
@@ -60,10 +48,7 @@ const Demo: React.FC = () => {
               text: msg.content,
               sender: msg.role === 'user' ? 'user' : 'ai',
               timestamp: new Date(Date.now() - (mockData.length - index) * 60000), // Stagger timestamps
-              attachments: (msg as any).attachments || undefined, // Handle attachments from mock conversation
-              actions: msg.actions || undefined,
-              attachment: msg.attachment || undefined,
-              code: msg.code || undefined
+              attachments: (msg as any).attachments || undefined // Handle attachments from mock conversation
             };
             
             // Debug logging for attachments
@@ -150,24 +135,6 @@ const Demo: React.FC = () => {
     console.log('Commentary clicked:', commentary);
     // You can add specific actions for each commentary type here
     // For example, show tooltips, expand details, or trigger specific behaviors
-  };
-
-  const handleActionClick = (action: string, message: Message) => {
-    if (action === 'Visualize' && message.attachment) {
-      setModalType('visualize');
-      setModalData(message.attachment);
-      setShowModal(true);
-    } else if (action === 'Inspect' && message.code) {
-      setModalType('inspect');
-      setModalData(message.code);
-      setShowModal(true);
-    }
-  };
-
-  const closeModal = () => {
-    setShowModal(false);
-    setModalType(null);
-    setModalData(null);
   };
 
   const renderAttachment = (attachment: Attachment) => {
@@ -640,49 +607,8 @@ const Demo: React.FC = () => {
       <div className="flex-1 flex flex-col">
         <div className="flex-1 flex">
           
-          {/* Left Sidebar - Threads */}
-          <div className="w-64 bg-white border-r border-gray-200 flex flex-col">
-            {/* Threads Header */}
-            <div className="p-4 border-b border-gray-200">
-              <h2 className="text-lg font-semibold text-gray-900">Threads</h2>
-            </div>
-            
-            {/* Thread List */}
-            <div className="flex-1 p-4 space-y-2">
-              <button
-                onClick={() => setActiveThread('customers')}
-                className={`w-full flex items-center space-x-3 p-3 rounded-lg text-left transition-colors ${
-                  activeThread === 'customers' 
-                    ? 'bg-coral-50 border border-coral-200 text-coral-700' 
-                    : 'hover:bg-gray-50 text-gray-700'
-                }`}
-              >
-                <UserGroupIcon className="w-5 h-5" />
-                <div>
-                  <div className="font-medium">Top customers</div>
-                  <div className="text-sm text-gray-500">Revenue analysis</div>
-                </div>
-              </button>
-              
-              <button
-                onClick={() => setActiveThread('leads')}
-                className={`w-full flex items-center space-x-3 p-3 rounded-lg text-left transition-colors ${
-                  activeThread === 'leads' 
-                    ? 'bg-coral-50 border border-coral-200 text-coral-700' 
-                    : 'hover:bg-gray-50 text-gray-700'
-                }`}
-              >
-                <ChartBarIcon className="w-5 h-5" />
-                <div>
-                  <div className="font-medium">Top leads</div>
-                  <div className="text-sm text-gray-500">Lead generation</div>
-                </div>
-              </button>
-            </div>
-          </div>
-
-          {/* Main Panel - Chat Window */}
-          <div className="flex-1 bg-white flex flex-col min-h-0">
+          {/* Left Panel - Chat Window */}
+          <div className="w-3/5 bg-white border-r border-gray-200 flex flex-col min-h-0">
             {/* Chat Header */}
             <div className="p-2 border-b border-gray-200 sticky top-0 bg-white z-10">
               <div className="flex items-center space-x-3">
@@ -704,41 +630,24 @@ const Demo: React.FC = () => {
                   animate={{ opacity: 1, y: 0 }}
                   className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
                 >
-                  <div className="max-w-xs lg:max-w-lg xl:max-w-xl">
-                    <div className={`px-4 py-2 rounded-lg ${
-                      message.sender === 'user' 
-                        ? 'bg-gradient-to-r from-coral-600 to-brick-600 text-white' 
-                        : 'bg-gray-100 text-gray-900'
-                    }`}>
-                      <div className="text-sm">
-                        {renderMessageWithWidgets(message.text)}
-                        {/* Render attachments if they exist */}
-                        {message.attachments && message.attachments.length > 0 && (
-                          <div className="mt-3 space-y-3">
-                            {message.attachments.map((attachment, index) => (
-                              <div key={index}>
-                                {renderAttachment(attachment)}
-                              </div>
-                            ))}
-                          </div>
-                        )}
-                      </div>
+                  <div className={`max-w-xs lg:max-w-lg xl:max-w-xl px-4 py-2 rounded-lg ${
+                    message.sender === 'user' 
+                      ? 'bg-gradient-to-r from-coral-600 to-brick-600 text-white' 
+                      : 'bg-gray-100 text-gray-900'
+                  }`}>
+                    <div className="text-sm">
+                      {renderMessageWithWidgets(message.text)}
+                      {/* Render attachments if they exist */}
+                      {message.attachments && message.attachments.length > 0 && (
+                        <div className="mt-3 space-y-3">
+                          {message.attachments.map((attachment, index) => (
+                            <div key={index}>
+                              {renderAttachment(attachment)}
+                            </div>
+                          ))}
+                        </div>
+                      )}
                     </div>
-                    
-                    {/* Action Buttons for AI messages - Outside the message bubble */}
-                    {message.sender === 'ai' && message.actions && message.actions.length > 0 && (
-                      <div className="mt-2 flex flex-wrap gap-2">
-                        {message.actions.map((action, index) => (
-                          <button
-                            key={index}
-                            onClick={() => handleActionClick(action, message)}
-                            className="text-xs text-gray-500 hover:text-gray-700 underline hover:no-underline transition-colors duration-200"
-                          >
-                            {action}
-                          </button>
-                        ))}
-                      </div>
-                    )}
                   </div>
                 </motion.div>
               ))}
@@ -783,84 +692,137 @@ const Demo: React.FC = () => {
               </div>
             </div>
           </div>
-        </div>
-      </div>
 
-      {/* Modal */}
-      {showModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg shadow-xl max-w-4xl w-full mx-4 max-h-[80vh] flex flex-col">
-            {/* Modal Header */}
-            <div className="flex items-center justify-between p-4 border-b border-gray-200">
-              <h3 className="text-lg font-semibold text-gray-900">
-                {modalType === 'visualize' ? 'Data Visualization' : 'Code Inspection'}
-              </h3>
-              <button
-                onClick={closeModal}
-                className="text-gray-400 hover:text-gray-600 transition-colors"
-              >
-                <XMarkIcon className="w-6 h-6" />
-              </button>
+          {/* Right Panel - AI Builder */}
+          <div className="w-2/5 bg-white flex flex-col min-h-0">
+            {/* Builder Header */}
+            <div className="p-2 border-b border-gray-200 sticky top-0 bg-white z-10">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <button
+                    onClick={() => setShowGeneratedAgent(!showGeneratedAgent)}
+                    className="px-3 py-1 text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-md transition-colors duration-200"
+                  >
+                    {showGeneratedAgent ? 'Hide' : 'Show'}
+                  </button>
+                  <div className="w-6 h-6 bg-gradient-to-r from-purple-500 to-indigo-600 rounded-full flex items-center justify-center">
+                    <SparklesIcon className="w-3 h-3 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-gray-900 text-sm">Generated Agent</h3>
+                  </div>
+                </div>
+                <button
+                  onClick={() => console.log('Publish button clicked')}
+                  className="px-3 py-1 text-xs bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-md hover:from-green-700 hover:to-emerald-700 transition-colors duration-200 font-medium"
+                >
+                  Publish
+                </button>
+              </div>
             </div>
-            
-            {/* Modal Content */}
-            <div className="flex-1 overflow-y-auto p-4">
-              {modalType === 'visualize' && modalData && (
-                <div className="space-y-4">
-                  {modalData.map((attachment: any, index: number) => (
-                    <div key={index} className="border border-gray-200 rounded-lg p-4">
-                      <h4 className="text-sm font-semibold text-gray-700 mb-3">Data Table</h4>
-                      <div className="overflow-x-auto">
-                        <table className="min-w-full text-sm">
-                          <thead>
-                            <tr className="border-b border-gray-300">
-                              {attachment.columns.map((header: string, colIndex: number) => (
-                                <th key={colIndex} className="px-3 py-2 text-left font-medium text-gray-700 bg-gray-100">
-                                  {header}
-                                </th>
-                              ))}
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {attachment.rows.map((row: any[], rowIndex: number) => (
-                              <tr key={rowIndex} className="border-b border-gray-200 hover:bg-gray-50">
-                                {row.map((cell: any, colIndex: number) => (
-                                  <td key={colIndex} className="px-3 py-2 text-gray-600">
-                                    {String(cell)}
-                                  </td>
-                                ))}
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
+
+            {/* Builder Content */}
+            {showGeneratedAgent && (
+              <div className="flex-1 p-6">
+                <div className="mb-6">
+                  
+                  {/* Flowchart */}
+                  <div className="space-y-4">
+                    {/* Trigger */}
+                    <div className="flex items-center justify-center">
+                      <div className="flex items-center space-x-2">
+                        <img src="/logo.png" alt="Coral Bricks AI" className="w-5 h-5" />
+                        <div className="bg-emerald-500 text-white px-4 py-2 rounded-lg font-medium text-sm">
+                          Timer Trigger
+                        </div>
                       </div>
                     </div>
-                  ))}
-                </div>
-              )}
-              
-              {modalType === 'inspect' && modalData && (
-                <div className="bg-gray-900 rounded-lg p-4">
-                  <div className="flex items-center justify-between mb-4">
-                    <h4 className="text-sm font-semibold text-gray-300">TypeScript Code</h4>
-                    <button
-                      onClick={() => navigator.clipboard.writeText(modalData)}
-                      className="text-xs text-gray-400 hover:text-white transition-colors duration-200"
-                    >
-                      Copy Code
-                    </button>
+                    
+                    {/* Arrow */}
+                    <div className="flex justify-center">
+                      <svg className="w-4 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M10 3a1 1 0 011 1v10.586l3.293-3.293a1 1 0 111.414 1.414l-5 5a1 1 0 01-1.414 0l-5-5a1 1 0 111.414-1.414L9 14.586V4a1 1 0 011-1z" clipRule="evenodd" />
+                      </svg>
+                    </div>
+                    
+                    {/* Get Data Step */}
+                    <div className="flex items-center justify-center space-x-4">
+                      <div className="flex items-center space-x-2">
+                        <img src="/qbo_logo.jpg" alt="QuickBooks" className="w-5 h-5" />
+                        <div className="bg-green-500 text-white px-3 py-2 rounded-lg font-medium text-xs">
+                          Get Purchase Price
+                        </div>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <img src="/qbo_logo.jpg" alt="QuickBooks" className="w-5 h-5" />
+                        <div className="bg-green-500 text-white px-3 py-2 rounded-lg font-medium text-xs">
+                          Get Selling Price
+                        </div>
+                      </div>
+                    </div>
+                    
+                    {/* Arrow */}
+                    <div className="flex justify-center">
+                      <svg className="w-4 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M10 3a1 1 0 011 1v10.586l3.293-3.293a1 1 0 111.414 1.414l-5 5a1 1 0 01-1.414 0l-5-5a1 1 0 111.414-1.414L9 14.586V4a1 1 0 011-1z" clipRule="evenodd" />
+                      </svg>
+                    </div>
+                    
+                    {/* Compute Step */}
+                    <div className="flex items-center justify-center">
+                      <div className="flex items-center space-x-2">
+                        <img src="/logo.png" alt="Coral Bricks AI" className="w-5 h-5" />
+                        <div className="bg-blue-500 text-white px-4 py-2 rounded-lg font-medium text-sm">
+                          Compute Markup
+                        </div>
+                      </div>
+                    </div>
+                    
+                    {/* Arrow */}
+                    <div className="flex justify-center">
+                      <svg className="w-4 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M10 3a1 1 0 011 1v10.586l3.293-3.293a1 1 0 111.414 1.414l-5 5a1 1 0 01-1.414 0l-5-5a1 1 0 111.414-1.414L9 14.586V4a1 1 0 011-1z" clipRule="evenodd" />
+                      </svg>
+                    </div>
+                    
+                    {/* Generate Step */}
+                    <div className="flex items-center justify-center">
+                      <div className="flex items-center space-x-2">
+                        <img src="/logo.png" alt="Coral Bricks AI" className="w-5 h-5" />
+                        <div className="bg-gray-500 text-white px-2 py-1 rounded text-xs font-medium">
+                          BYOM
+                        </div>
+                        <div className="bg-purple-500 text-white px-4 py-2 rounded-lg font-medium text-sm">
+                          Generate Email
+                        </div>
+                      </div>
+                    </div>
+                    
+                    {/* Arrow */}
+                    <div className="flex justify-center">
+                      <svg className="w-4 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M10 3a1 1 0 011 1v10.586l3.293-3.293a1 1 0 111.414 1.414l-5 5a1 1 0 01-1.414 0l-5-5a1 1 0 111.414-1.414L9 14.586V4a1 1 0 011-1z" clipRule="evenodd" />
+                      </svg>
+                    </div>
+                    
+                    {/* Send Step */}
+                    <div className="flex items-center justify-center">
+                      <div className="flex items-center space-x-2">
+                        <img src="/mailgun_logo.png" alt="Mailgun" className="w-5 h-5" />
+                        <div className="bg-red-500 text-white px-4 py-2 rounded-lg font-medium text-sm">
+                          Send Email
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                  <pre className="text-sm text-gray-100 overflow-x-auto">
-                    <code>{modalData}</code>
-                  </pre>
                 </div>
-              )}
-            </div>
+              </div>
+            )}
           </div>
         </div>
-      )}
+      </div>
     </div>
   );
 };
 
-export default Demo;
+export default Demo; 
